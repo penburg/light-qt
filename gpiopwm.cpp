@@ -3,7 +3,7 @@
 GpioPWM::GpioPWM(shared_ptr<BasicOnOff> pin, QString n) : BasicOnOff(n){
     outputPin = pin;
     enabled = false;
-    setRate(100);
+
     this->workTimer = unique_ptr<QTimer>(new QTimer(this));
     //When Done working rest
     connect(workTimer.get(), &QTimer::timeout, this, &GpioPWM::onRest);
@@ -13,7 +13,7 @@ GpioPWM::GpioPWM(shared_ptr<BasicOnOff> pin, QString n) : BasicOnOff(n){
     // When Done resting work;
     connect(restTimer.get(), &QTimer::timeout, this, &GpioPWM::onWork);
     restTimer->setSingleShot(true);
-
+    setRate(100);
 }
 
 GpioPWM::~GpioPWM()
