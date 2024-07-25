@@ -34,7 +34,7 @@ class Lights : public QThread
 {
     Q_OBJECT
 public:
-    Lights(QString chipName = "gpiochip0", QObject *parent = nullptr);
+    Lights(QObject *parent = nullptr);
     ~Lights();
     void run() override;
     void shutdown();
@@ -127,6 +127,7 @@ private:
 
     QString Setting_GPIO_Enabled;
 
+    QString Setting_GPIO_Chip = "gpioChip";
     QString Setting_Name = "Name";
     QString Setting_Sunset = "Sunset";
     QString Setting_Sunrise = "Sunrise";

@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::addOnOffGroup, backend.get(), &Lights::addOnOffGroup);
     QObject::connect(&console, &Console::addEventAction, backend.get(), &Lights::addEventAction);
     QObject::connect(&console, &Console::addGpioInput, backend.get(), &Lights::addGpioInput);
+    QObject::connect(&console, &Console::addGpioPWM, backend.get(), &Lights::addGpioPWM);
 
     QObject::connect(&console, &Console::enableEvapCooler, backend.get(), &Lights::enableEvapCooler);
     QObject::connect(&console, &Console::configEvapCooler, backend.get(), &Lights::configEvapCooler);
@@ -82,6 +83,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&console, &Console::sunRiseSetUpdated, backend.get(), &Lights::sunRiseSetUpdated);
     QObject::connect(&console, &Console::setRelay, backend.get(), &Lights::setRelay);
+    QObject::connect(&console, &Console::setPWMRate, backend.get(), &Lights::setPWMRate);
     QObject::connect(&console, &Console::toggleRelay, backend.get(), &Lights::toggle);
 
 

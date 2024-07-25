@@ -1,7 +1,9 @@
 #include "lights.h"
 
-Lights::Lights(QString chipName, QObject *parent) : QThread(parent)
+Lights::Lights(QObject *parent) : QThread(parent)
 {
+    QString chipName = settings.value(Setting_GPIO_Chip, "gpiochip0").toString();
+
     try{
         chip = unique_ptr<gpiod::chip>(new gpiod::chip(chipName.toStdString()));
     }
@@ -50,6 +52,9 @@ Lights::~Lights()
             i.value()->shutdown();
             qDebug() << i.key() << "Shutdown";
         }
+    }
+    if(!gpioPWMs->isEmpty()){
+        gpioPWMs->clear();
     }
     if(!basicIOs->empty()){
         qDebug() << "Shuting gpios down";
