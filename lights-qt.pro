@@ -20,6 +20,7 @@ SOURCES += \
         gpioinput.cpp \
         gpioinputthread.cpp \
         gpiooutput.cpp \
+        gpiopwm.cpp \
         lights.cpp \
         main.cpp \
         nwsthermalsensor.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     gpioinput.h \
     gpioinputthread.h \
     gpiooutput.h \
+    gpiopwm.h \
     lights.h \
     nwsthermalsensor.h \
     onoffgroup.h \
