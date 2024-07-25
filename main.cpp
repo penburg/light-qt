@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::setRelay, backend.get(), &Lights::setRelay);
     QObject::connect(&console, &Console::setPWMRate, backend.get(), &Lights::setPWMRate);
     QObject::connect(&console, &Console::toggleRelay, backend.get(), &Lights::toggle);
+    QObject::connect(&console, &Console::setGpioChip, backend.get(), &Lights::setGpioChip);
 
 
 

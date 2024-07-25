@@ -1037,6 +1037,13 @@ bool Lights::enableEvapCooler(bool enabled)
     return true;
 }
 
+bool Lights::setGpioChip(QString chipName)
+{
+    settings.setValue(Setting_GPIO_Chip, chipName);
+    qInfo() << "Restart the program to use the new chip";
+    return true;
+}
+
 bool Lights::configEvapCooler(QString name, QString sensor, QString pump, QString fan, int fanDelay)
 {
     bool success = activateEvapCooler(name, sensor, fan, pump, fanDelay);

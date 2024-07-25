@@ -76,6 +76,7 @@ public slots:
     bool setRelay(QString name, QString state);
     void sunRiseSetUpdated();
     bool enableEvapCooler(bool enabled);
+    bool setGpioChip(QString chipName);
 
 
 private:

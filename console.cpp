@@ -433,6 +433,20 @@ string Console::configSetPWM(QStringList commands)
     }
 }
 
+string Console::configSetGPIOChip(QStringList commands)
+{
+    string help = "useage: config set gpioChip \"Name of chip\"";
+    if(commands.size() == 1){
+        QString name = commands.at(0);
+        bool status = emit setGpioChip(name);
+        return status ? OK : FAIL;
+    }
+    else{
+        return help;
+    }
+}
+
+
 string Console::ls(QStringList commands)
 {
     if(commands.size() > 0){
@@ -558,8 +572,11 @@ string Console::globalSetParse(QStringList commands)
         else if(commands.at(0).compare("sunRiseSet", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return globalSetSunCalcs(commands.mid(1));
         }
+        else if(commands.at(0).compare("gpioChip", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return configSetGPIOChip(commands.mid(1));
+        }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable globalConfig set options: thermalUnits, sunRiseSet";
+            return "Avalable globalConfig set options: gpioChip, thermalUnits, sunRiseSet";
         }
     }
     return "\"globalConfig set help\" for useage";
