@@ -71,8 +71,11 @@ string Console::configParse(QStringList commands)
         if(commands.at(0).compare("add", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return configAddParse(commands.mid(1));
         }
+        if(commands.at(0).compare("set", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return configSetParse(commands.mid(1));
+        }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable config Commands: add, help";
+            return "Avalable config Commands: add, set, help";
         }
 
         else{
@@ -116,8 +119,24 @@ string Console::configAddParse(QStringList commands)
         else if(commands.at(0).compare("GpioInput", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return configAddGpioInput(commands.mid(1));
         }
+        else if(commands.at(0).compare("GpioPWM", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return configAddGpioPWM(commands.mid(1));
+        }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable config add Devices: thermalAlert, thermalSensor, thermostat, NwsSensor, outputRelay, alarm, OnOffGroup, GpioInput";
+            return "Avalable config add Devices: thermalAlert, thermalSensor, thermostat, NwsSensor, outputRelay, alarm, OnOffGroup, GpioInput, GpioPWM";
+        }
+    }
+    return "\"config add help\" for useage";
+}
+
+string Console::configSetParse(QStringList commands)
+{
+    if(commands.size() > 0){
+        if(commands.at(0).compare("PWM", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return configSetPWM(commands.mid(1));
+        }
+        else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return "Avalable config set options: PWM";
         }
     }
     return "\"config add help\" for useage";
@@ -369,6 +388,43 @@ string Console::configAddGpioInput(QStringList commands)
         }
         if(isInt){
             status = emit addGpioInput(name, line, edge, activeLow);
+        }
+        return status ? OK : FAIL;
+    }
+    else{
+        return help;
+    }
+}
+
+string Console::configAddGpioPWM(QStringList commands)
+{
+    string help = "useage: config add GpioPWM \"Name of PWM\" \"NameOutputDevice\" <rate>(0-100)";
+    if(commands.size() == 3){
+        bool isInt;
+        QString name = commands.at(0);
+        QString outputDev = commands.at(1);
+        int rate = commands.at(2).toInt(&isInt);
+        bool status = false;
+        if(isInt){
+            status = emit addGpioPWM(name, outputDev, rate);
+        }
+        return status ? OK : FAIL;
+    }
+    else{
+        return help;
+    }
+}
+
+string Console::configSetPWM(QStringList commands)
+{
+    string help = "useage: config set PWM \"Name of PWM\" <rate>(0-100)";
+    if(commands.size() == 2){
+        bool isInt;
+        QString name = commands.at(0);
+        int rate = commands.at(1).toInt(&isInt);
+        bool status = false;
+        if(isInt){
+            status = emit setPWMRate(name, rate);
         }
         return status ? OK : FAIL;
     }

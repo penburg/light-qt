@@ -33,6 +33,7 @@ signals:
     bool addOnOffGroup(QString name, QStringList devices);
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
     bool addGpioInput(QString name, int line, QString edge, bool activeLow = false);
+    bool addGpioPWM(QString name, QString outputDev, int rate);
     bool enableEvapCooler(bool enabled);
     bool configEvapCooler(QString name, QString sensor, QString pump, QString fan, int fanDelay);
     bool configEvapCoolerFanCondition(QString condition, QString fanName, double temp);
@@ -52,6 +53,7 @@ signals:
     string lsEvapCoolerModes();
     bool setRelay(QString name, QString state);
     bool toggleRelay(QString name);
+    bool setPWMRate(QString name, int rate);
 
 private:
     QSocketNotifier *notifier;
@@ -60,6 +62,7 @@ private:
     bool findCommand(QStringList commandList);
     string configParse(QStringList commands);
     string configAddParse(QStringList commands);
+    string configSetParse(QStringList commands);
     string configAddOutput(QStringList commands);
     string configAddThermal(QStringList commands);
     string configAddNwsThermal(QStringList commands);
@@ -69,6 +72,8 @@ private:
     string configAddOnOffGroup(QStringList commands);
     string configAddEventAction(QStringList commands);
     string configAddGpioInput(QStringList commands);
+    string configAddGpioPWM(QStringList commands);
+    string configSetPWM(QStringList commands);
     string ls(QStringList commands);
     string turnParse(QStringList commands);
     string toggleParse(QStringList commands);
