@@ -1,9 +1,9 @@
 #include "gpiopwm.h"
 
-GpioPWM::GpioPWM(shared_ptr<GpioOutput> pin, QString n) : BasicOnOff(n){
+GpioPWM::GpioPWM(shared_ptr<BasicOnOff> pin, QString n) : BasicOnOff(n){
     outputPin = pin;
     enabled = false;
-    setLevel(100);
+    setRate(100);
     this->workTimer = unique_ptr<QTimer>(new QTimer(this));
     //When Done working rest
     connect(workTimer.get(), &QTimer::timeout, this, &GpioPWM::onRest);

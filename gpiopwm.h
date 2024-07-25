@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QTimer>
 #include <memory>
-#include "gpiooutput.h"
 #include "basiconoff.h"
 
 using namespace std;
@@ -13,7 +12,7 @@ class GpioPWM :public BasicOnOff
 {
     Q_OBJECT
 public:
-    explicit GpioPWM(shared_ptr<GpioOutput> pin, QString n);
+    explicit GpioPWM(shared_ptr<BasicOnOff> pin, QString n);
     ~GpioPWM();
     void setRate(int r);
     int getRate() const;
@@ -33,7 +32,7 @@ private:
     bool enabled;
     void onWork();
     void onRest();
-    shared_ptr<GpioOutput> outputPin;
+    shared_ptr<BasicOnOff> outputPin;
     unique_ptr<QTimer> workTimer;
     unique_ptr<QTimer> restTimer;
 
