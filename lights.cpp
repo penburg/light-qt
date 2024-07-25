@@ -1,9 +1,9 @@
 #include "lights.h"
 
-Lights::Lights(QObject *parent) : QThread(parent)
+Lights::Lights(QString chipName, QObject *parent) : QThread(parent)
 {
     try{
-        chip = unique_ptr<gpiod::chip>(new gpiod::chip("gpiochip0"));
+        chip = unique_ptr<gpiod::chip>(new gpiod::chip(chipName.toStdString()));
     }
     catch (std::system_error& e){
         qWarning() << "Gpio Chip ERROR" << e.code().value() << "-" << e.what();
@@ -18,10 +18,12 @@ Lights::Lights(QObject *parent) : QThread(parent)
     consoleLogger = unique_ptr<AlertLogger>(new AlertLogger());
     sunRiseSet = unique_ptr<SunRiseSet>(new SunRiseSet());
     gpioInputs = make_shared<QHash<QString, shared_ptr<GpioInput>>>();
+    gpioPWMs = make_shared<QHash<QString, shared_ptr<GpioPWM>>>();
     setupGpios();
     setupThermalSensors();
     setupNwsThermalSensor();
     setupSunRiseSet();
+    setupPWMs();
     connect(sunRiseSet.get(), &SunRiseSet::onSunRise, consoleLogger.get(), &AlertLogger::onSunRise);
     connect(sunRiseSet.get(), &SunRiseSet::onSunSet, consoleLogger.get(), &AlertLogger::onSunSet);
 
@@ -135,6 +137,19 @@ bool Lights::toggle(QString name)
     }
     else{
         qWarning() << name << "Not Found";
+        return false;
+    }
+}
+
+bool Lights::setPWMRate(QString name, int rate)
+{
+    shared_ptr<GpioPWM> pwm = gpioPWMs->value(name, nullptr);
+    if(pwm != nullptr){
+        pwm->setRate(rate);
+        return true;
+    }
+    else{
+        qWarning()  << name << "Not Found";
         return false;
     }
 }
@@ -270,6 +285,23 @@ bool Lights::addGpioInput(QString name, int line, QString edge, bool activeLow)
             settings.setValue(Setting_GpioActiveLow, activeLow);
         }
 
+        settings.endArray();
+    }
+    return success;
+}
+
+bool Lights::addGpioPWM(QString name, QString outputDev, int rate)
+{
+    bool success = activateGpioPwm(name, outputDev, rate);
+    if(success){
+        int size = settings.beginReadArray(Setting_GPIO_PWM);
+        settings.endArray();
+
+        settings.beginWriteArray(Setting_GPIO_PWM);
+        settings.setArrayIndex(size);
+        settings.setValue(Setting_Name, name);
+        settings.setValue(Setting_GPIOOutputDevice, outputDev);
+        settings.setValue(Setting_GPIO_PWM_Rate, rate);
         settings.endArray();
     }
     return success;
@@ -548,6 +580,20 @@ bool Lights::activateEvapCoolerSetMode(QString mode)
     return false;
 }
 
+bool Lights::activateGpioPwm(QString name, QString outputDev, int rate)
+{
+    shared_ptr<BasicOnOff> outDev = basicIOs->value(outputDev);
+    if(outDev != nullptr){
+        shared_ptr<GpioPWM> pwm = make_shared<GpioPWM>(outDev, name);
+        pwm->setRate(rate);
+        basicIOs->remove(outputDev);
+        basicIOs->insert(name, pwm);
+        gpioPWMs->insert(name, pwm);
+        return true;
+    }
+    return false;
+}
+
 void Lights::setupThermalSensors()
 {
     int size = settings.beginReadArray(Setting_ThermalSensor);
@@ -772,6 +818,21 @@ void Lights::setupEvapCooler()
     }
     settings.endGroup();
 
+}
+
+void Lights::setupPWMs()
+{
+    int size = settings.beginReadArray(Setting_GPIO_PWM);
+    for (int i = 0; i < size ;i++ ) {
+        settings.setArrayIndex(i);
+        QString name = settings.value(Setting_Name, "").toString();
+        int rate = settings.value(Setting_GPIO_PWM_Rate, -1).toInt();
+        QString outputPin = settings.value(Setting_GPIOOutputDevice, "").toString();
+        if(!name.isEmpty() && rate >= 0 && rate <= 100 && !outputPin.isEmpty()){
+            activateGpioPwm(name, outputPin, rate);
+        }
+    }
+    settings.endArray();
 }
 
 string Lights::lsBasicOnOff()

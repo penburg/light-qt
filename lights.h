@@ -3,6 +3,7 @@
 
 #include "gpiooutput.h"
 #include "basiconoff.h"
+#include "gpiopwm.h"
 #include "thermalsensor.h"
 #include "sysfsthermalsensor.h"
 #include "nwsthermalsensor.h"
@@ -33,7 +34,7 @@ class Lights : public QThread
 {
     Q_OBJECT
 public:
-    Lights(QObject *parent = nullptr);
+    Lights(QString chipName = "gpiochip0", QObject *parent = nullptr);
     ~Lights();
     void run() override;
     void shutdown();
@@ -45,12 +46,14 @@ public slots:
     bool turnOff(QString name);
     bool turnAuto(QString name);
     bool toggle(QString name);
+    bool setPWMRate(QString name, int rate);
     bool addGpioOutput(QString name, int line, QString init, QString act);
     bool addThermalSensor(QString name, QString path, int interval, double threshold, double errorValue);
     void addNwsSensor(QString name, QString station, int interval, double threshold);
     bool addThermostat(QString name, QString sensor, QString ioDevice, double temperature, QString mode, double threshold, int minOn, int minOff);
     bool addThermalAlert(QString name, QString sensor, double threshold, double warning, double critical, bool isGreaterThan);
     bool addGpioInput(QString name, int line, QString edge, bool activeLow = false);
+    bool addGpioPWM(QString name, QString outputDev, int rate);
     bool configEvapCooler(QString name, QString sensor, QString pump, QString fan, int fanDelay);
     bool configEvapCoolerFanCondition(QString condition, QString fanName, double temp);
     bool configEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
@@ -87,6 +90,7 @@ private:
     shared_ptr<QHash<QString, shared_ptr<ActionEvent>>> events;
     shared_ptr<QHash<QString, shared_ptr<EventToAction>>> eventActions;
     shared_ptr<QHash<QString, shared_ptr<GpioInput>>> gpioInputs;
+    shared_ptr<QHash<QString, shared_ptr<GpioPWM>>> gpioPWMs;
     unique_ptr<AlertLogger> consoleLogger;
 
     template<class T>
@@ -107,6 +111,7 @@ private:
     bool activateEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
     bool activateEvapCoolerFanFilter(int filterTime, int timeRemain);
     bool activateEvapCoolerSetMode(QString mode);
+    bool activateGpioPwm(QString name, QString outputDev, int rate);
 
     void setupThermalSensors();
     void setupSunRiseSet();
@@ -118,6 +123,7 @@ private:
     void setupEventToAction();
     void setupGpioInput();
     void setupEvapCooler();
+    void setupPWMs();
 
     QString Setting_GPIO_Enabled;
 
@@ -187,6 +193,9 @@ private:
     QString Setting_EvapCooler_FilterTime = "usedTime";
     QString Setting_EvapCooler_FilterLife = "lifeSpan";
     QString Setting_EvapCooler_Mode = "mode";
+
+    QString Setting_GPIO_PWM = "gpioPWM";
+    QString Setting_GPIO_PWM_Rate = "rate";
 };
 
 #endif // LIGHTS_H
