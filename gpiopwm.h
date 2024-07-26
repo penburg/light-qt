@@ -28,7 +28,7 @@ public:
     QString getStatus() const override;
 
 private:
-    int rate;
+    int rate, workTime, restTime;
     bool enabled;
     void onWork();
     void onRest();

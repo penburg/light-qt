@@ -46,6 +46,7 @@ int GpioPWM::getRate() const
 void GpioPWM::turnOn()
 {
     if(!enabled && rate > 0){
+        state = STATE::ON;
         enabled = true;
         if(rate < 100){
             onWork();
@@ -58,9 +59,11 @@ void GpioPWM::turnOn()
 
 void GpioPWM::turnOff()
 {
+    state = STATE::OFF;
     enabled = false;
     workTimer->stop();
     restTimer->stop();
+    outputPin->turnOff();
 
 }
 
@@ -68,6 +71,7 @@ QString GpioPWM::getStatus() const
 {
     QString ret = BasicOnOff::getStatus();
     ret += "\tRate: " + QString::number(rate) + "\n";
+    ret += "\tW/R time: " + QString::number(workTime) + "/" + QString::number(restTime) + "\n";
     return ret;
 }
 
