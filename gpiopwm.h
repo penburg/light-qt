@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 #include <memory>
+#include <numeric>
 #include "basiconoff.h"
 
 using namespace std;
@@ -30,6 +31,7 @@ public:
 private:
     int rate, workTime, restTime;
     bool enabled;
+    void optomizeRate();
     void onWork();
     void onRest();
     shared_ptr<BasicOnOff> outputPin;

@@ -3,8 +3,10 @@
 GpioPWM::GpioPWM(shared_ptr<BasicOnOff> pin, QString n) : BasicOnOff(n){
     outputPin = pin;
     enabled = false;
+    state = STATE::OFF;
 
     this->workTimer = unique_ptr<QTimer>(new QTimer(this));
+    this->workTimer->setTimerType(Qt::PreciseTimer);
     //When Done working rest
     connect(workTimer.get(), &QTimer::timeout, this, &GpioPWM::onRest);
     workTimer->setSingleShot(true);
@@ -13,6 +15,7 @@ GpioPWM::GpioPWM(shared_ptr<BasicOnOff> pin, QString n) : BasicOnOff(n){
     // When Done resting work;
     connect(restTimer.get(), &QTimer::timeout, this, &GpioPWM::onWork);
     restTimer->setSingleShot(true);
+    this->restTimer->setTimerType(Qt::PreciseTimer);
     setRate(100);
 }
 
@@ -33,8 +36,16 @@ void GpioPWM::setRate(int r)
     int level = r > 100 ? 100 : r;
     level = level < 0 ? 0 : level;
     rate = level;
-    workTimer->setInterval(rate);
-    restTimer->setInterval(100 - rate);
+    workTime = rate;
+    restTime = 100 - rate;
+    optomizeRate();
+    workTimer->setInterval(workTime);
+    restTimer->setInterval(restTime);
+    if(enabled){//rest timer states
+        GpioPWM::turnOff();
+        GpioPWM::turnOn();
+        enabled = true;
+    }
 
 }
 
@@ -45,7 +56,7 @@ int GpioPWM::getRate() const
 
 void GpioPWM::turnOn()
 {
-    if(!enabled && rate > 0){
+    if(!enabled && workTime > 0){
         state = STATE::ON;
         enabled = true;
         if(rate < 100){
@@ -72,23 +83,51 @@ QString GpioPWM::getStatus() const
     QString ret = BasicOnOff::getStatus();
     ret += "\tRate: " + QString::number(rate) + "\n";
     ret += "\tW/R time: " + QString::number(workTime) + "/" + QString::number(restTime) + "\n";
+    ret += "read: " + QString::number(workTimer->interval()) + "/" + QString::number(restTimer->interval()) + "\n";
     return ret;
+}
+
+/* Reduces the work/rest time by it's gcd
+*  if either time is 20 millisecs or more
+*  we divide both by 5 so that they are and
+*  reduce by the gcd again
+*/
+void GpioPWM::optomizeRate()
+{
+    int gcd = std::gcd(workTime, restTime);
+    int optW = workTime / gcd;
+    int optR = restTime / gcd;
+    if(optW < 20 && optR  < 20){
+        workTime = optW;
+        restTime = optR;
+    }
+    else{
+        optW = workTime / 5;
+        optR = restTime / 5;
+        gcd = std::gcd(optW, optR);
+        workTime  = optW / gcd;
+        restTime = optR / gcd;
+
+    }
 }
 
 void GpioPWM::onWork()
 {
-    if(enabled && rate > 0){
+    if(enabled && workTime > 0){
         outputPin->turnOn();
     }
-    if(rate < 100){
+    if(workTime < 100){
         workTimer->start();
+    }
+    if (workTime == 0){ //workTime = 0
+        outputPin->turnOff();
     }
 }
 
 void GpioPWM::onRest()
 {
     outputPin->turnOff();
-    if(enabled && rate > 0){
+    if(enabled && restTime > 0){
         restTimer->start();
     }
 }
