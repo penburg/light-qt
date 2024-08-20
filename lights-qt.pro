@@ -56,6 +56,7 @@ HEADERS += \
     lights.h \
     nwsthermalsensor.h \
     onoffgroup.h \
+    settable.h \
     statusable.h \
     sunriseset.h \
     sysfsthermalsensor.h \
