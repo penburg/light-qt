@@ -6,10 +6,11 @@
 #include <memory>
 #include <numeric>
 #include "basiconoff.h"
+#include "settable.h"
 
 using namespace std;
 
-class GpioPWM :public BasicOnOff
+class GpioPWM :public BasicOnOff, Settable
 {
     Q_OBJECT
 public:
@@ -27,6 +28,8 @@ public slots:
     // Statusable interface
 public:
     QString getStatus() const override;
+    // Settable interface
+    bool setOption(QString name, QVariant value) override;
 
 private:
     int rate, workTime, restTime;
@@ -37,6 +40,8 @@ private:
     shared_ptr<BasicOnOff> outputPin;
     unique_ptr<QTimer> workTimer;
     unique_ptr<QTimer> restTimer;
+
+
 
 
 

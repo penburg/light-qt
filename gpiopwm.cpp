@@ -87,6 +87,19 @@ QString GpioPWM::getStatus() const
     return ret;
 }
 
+bool GpioPWM::setOption(QString name, QVariant value)
+{
+    bool isInt = false;
+    int r = value.toInt(&isInt);
+    if(name.compare("pwm", Qt::CaseInsensitive) == 0 && isInt){
+        setRate(r);
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 /* Reduces the work/rest time by it's gcd
 *  if either time is 20 millisecs or more
 *  we divide both by 5 so that they are and
