@@ -1,12 +1,11 @@
 #ifndef SETTABLE_H
 #define SETTABLE_H
 
-#include <QObject>
+#include <QString>
 #include <QVariant>
 
-class Settable : public QObject
+class Settable
 {
-    Q_OBJECT
 public:
     virtual bool setOption(QString name, QVariant value) = 0;
 
