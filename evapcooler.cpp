@@ -181,6 +181,44 @@ void EvapCooler::startFan()
     }
 }
 
+QJsonDocument EvapCooler::lsOptions()
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(keyName, "Mode");
+    map.insert(keyValueType, "String");
+    map.insert(keyDesc, "Sets evapCooler mode");
+    ret.append(QJsonObject::fromVariantMap(map));
+    map.clear();
+
+    map.insert(keyName, "PurgeNow");
+    map.insert(keyValueType, "n/a");
+    map.insert(keyDesc, "Execute a purge cycle");
+    ret.append(QJsonObject::fromVariantMap(map));
+    map.clear();
+
+    map.insert(keyName, "tempMed");
+    map.insert(keyValueType, "double");
+    map.insert(keyDesc, "Sets evapCooler medium fanspeed temperature");
+    ret.append(QJsonObject::fromVariantMap(map));
+    map.clear();
+
+    map.insert(keyName, "tempHigh");
+    map.insert(keyValueType, "double");
+    map.insert(keyDesc, "Sets evapCooler high fanspeed temperature");
+    ret.append(QJsonObject::fromVariantMap(map));
+    map.clear();
+
+    map.insert(keyName, "fanDelay");
+    map.insert(keyValueType, "int");
+    map.insert(keyDesc, "Sets evapCooler fan on delay");
+    ret.append(QJsonObject::fromVariantMap(map));
+    map.clear();
+
+    return QJsonDocument(ret);
+}
+
 bool EvapCooler::setMode(const string &newMode)
 {
     bool valid = false;
@@ -202,6 +240,53 @@ string EvapCooler::lsModes()
     }
 
     return ret;
+}
+
+bool EvapCooler::setOption(QString name, QVariant value)
+{
+    if(name.compare("mode", Qt::CaseInsensitive) == 0){
+        return setMode(value.toString().toStdString());
+    }
+    else if(name.compare("purgeNow", Qt::CaseInsensitive) == 0){
+        purgeNow();
+        return true;
+    }
+    else if(name.compare("tempMed", Qt::CaseInsensitive) == 0){
+        bool isDouble = false;
+        double temp = value.toDouble(&isDouble);
+        if(isDouble){
+            tempMed = temp;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if(name.compare("tempHigh", Qt::CaseInsensitive) == 0){
+        bool isDouble = false;
+        double temp = value.toDouble(&isDouble);
+        if(isDouble){
+            tempHigh = temp;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if(name.compare("fanDelay", Qt::CaseInsensitive) == 0){
+        bool isInt = false;
+        int delay = value.toInt(&isInt);
+        if(isInt){
+            fanDelay = delay;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return false;
+    }
 }
 
 int EvapCooler::getFilterTime() const

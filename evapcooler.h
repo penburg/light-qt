@@ -4,12 +4,15 @@
 #include "basiconoff.h"
 #include "thermalsensor.h"
 #include "virtualio.h"
+#include "settable.h"
 #include <memory>
 #include <QTimer>
 #include <QDateTime>
 #include <QMetaEnum>
+#include <QJsonArray>
+#include <QJsonObject>
 
-class EvapCooler : public BasicOnOff
+class EvapCooler : public BasicOnOff, Settable
 {
     Q_OBJECT
 public:
@@ -38,6 +41,10 @@ public:
     void purgeNow();
     bool setMode(const string &newMode);
     string lsModes();
+
+    // Settable interface
+    bool setOption(QString name, QVariant value) override;
+    QJsonDocument lsOptions() override;
 
 signals:
     void filterIsDue();
