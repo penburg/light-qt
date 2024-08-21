@@ -100,6 +100,18 @@ bool GpioPWM::setOption(QString name, QVariant value)
     }
 }
 
+QJsonDocument GpioPWM::lsOptions()
+{
+    QJsonArray ret;
+    QVariantMap map;
+    map.insert(keyName, "PWM");
+    map.insert(keyValueType, "INT");
+    map.insert(keyDesc, "Sets the PWM level to <0-100>%");
+
+    ret.append(QJsonObject::fromVariantMap(map));
+    return QJsonDocument(ret);
+}
+
 /* Reduces the work/rest time by it's gcd
 *  if either time is 20 millisecs or more
 *  we divide both by 5 so that they are and

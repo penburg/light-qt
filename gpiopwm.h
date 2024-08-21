@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <memory>
 #include <numeric>
 #include "basiconoff.h"
@@ -30,6 +32,7 @@ public:
     QString getStatus() const override;
     // Settable interface
     bool setOption(QString name, QVariant value) override;
+    QJsonDocument lsOptions() override;
 
 private:
     int rate, workTime, restTime;
@@ -40,12 +43,6 @@ private:
     shared_ptr<BasicOnOff> outputPin;
     unique_ptr<QTimer> workTimer;
     unique_ptr<QTimer> restTimer;
-
-
-
-
-
-
 };
 
 #endif // GPIOPWM_H
