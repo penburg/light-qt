@@ -15,6 +15,43 @@ const QString &BasicOnOff::getName() const
     return name;
 }
 
+bool BasicOnOff::setOption(QString name, QVariant value)
+{
+    if(name.compare("State", Qt::CaseInsensitive) == 0){
+        bool valid = false;
+        QMetaEnum allStates = QMetaEnum::fromType<BasicOnOff::STATE>();
+        STATE s = static_cast<STATE>(allStates.keyToValue(value.toString().toLocal8Bit(), &valid));
+        if(valid){
+            switch(s){
+            case ON:
+                turnOn();
+                break;
+            case OFF:
+                turnOff();
+                break;
+            case AUTO:
+                setAuto();
+                break;
+            }
+        }
+        return valid;
+    }
+    return false;
+}
+
+QJsonDocument BasicOnOff::lsOptions()
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(keyName, "State");
+    map.insert(keyValueType, "String");
+    map.insert(keyDesc, "Sets device to ON, OFF, or AUTO");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 QString BasicOnOff::getStatus() const
 {
     QString ret;

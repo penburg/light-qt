@@ -4,10 +4,13 @@
 #include <QObject>
 #include <QDebug>
 #include <QMetaEnum>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include "statusable.h"
+#include "settable.h"
 
-class BasicOnOff : public QObject, public Statusable
+class BasicOnOff : public QObject, public Statusable, public Settable
 {
     Q_OBJECT
 public:
@@ -23,6 +26,10 @@ public:
     STATE getState() const;
     const QString &getName() const;
 
+    // Settable interface
+    bool setOption(QString name, QVariant value) override;
+    QJsonDocument lsOptions() override;
+
 public slots:
     virtual void turnOn() = 0;
     virtual void turnOff() = 0;
@@ -32,6 +39,8 @@ public slots:
 protected:
     STATE state;
     QString name;
+
+
 };
 
 #endif // BASICONOFF_H
