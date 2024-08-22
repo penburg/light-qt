@@ -4,15 +4,11 @@
 #include "basiconoff.h"
 #include "thermalsensor.h"
 #include "virtualio.h"
-#include "settable.h"
 #include <memory>
 #include <QTimer>
 #include <QDateTime>
-#include <QMetaEnum>
-#include <QJsonArray>
-#include <QJsonObject>
 
-class EvapCooler : public BasicOnOff, Settable
+class EvapCooler : public BasicOnOff
 {
     Q_OBJECT
 public:

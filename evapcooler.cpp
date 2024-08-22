@@ -183,7 +183,7 @@ void EvapCooler::startFan()
 
 QJsonDocument EvapCooler::lsOptions()
 {
-    QJsonArray ret;
+    QJsonArray ret = BasicOnOff::lsOptions().array();
     QVariantMap map;
 
     map.insert(keyName, "Mode");

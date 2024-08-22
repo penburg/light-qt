@@ -102,7 +102,7 @@ bool GpioPWM::setOption(QString name, QVariant value)
 
 QJsonDocument GpioPWM::lsOptions()
 {
-    QJsonArray ret;
+    QJsonArray ret = BasicOnOff::lsOptions().array();
     QVariantMap map;
     map.insert(keyName, "PWM");
     map.insert(keyValueType, "INT");

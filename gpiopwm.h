@@ -3,16 +3,13 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QJsonArray>
-#include <QJsonObject>
 #include <memory>
 #include <numeric>
 #include "basiconoff.h"
-#include "settable.h"
 
 using namespace std;
 
-class GpioPWM :public BasicOnOff, Settable
+class GpioPWM :public BasicOnOff
 {
     Q_OBJECT
 public:
