@@ -29,6 +29,9 @@ public:
     QString getStatus() const override;
     void setMinOffTime(int newMinOffTime);
     void setMinOnTime(int newMinOnTime);
+    // Settable interface
+    bool setOption(QString name, QVariant value) override;
+    QJsonDocument lsOptions() override;
 
 public slots:
     void turnOff() override;
@@ -58,7 +61,6 @@ private:
     MODE mode;
     bool isRunning;
     bool hold;
-
 
 };
 

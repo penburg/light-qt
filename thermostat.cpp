@@ -108,6 +108,31 @@ void Thermostat::setMinOnTime(int newMinOnTime)
     minOnTime = newMinOnTime;
 }
 
+bool Thermostat::setOption(QString name, QVariant value)
+{
+    if(name.compare("Temperature", Qt::CaseInsensitive) == 0 || name.compare("Temp", Qt::CaseInsensitive) == 0){
+        bool isDouble = false;
+        double temp = value.toDouble(&isDouble);
+        if(isDouble){
+            setTemperature(temp);
+            return true;
+        }
+    }
+    return false;
+}
+
+QJsonDocument Thermostat::lsOptions()
+{
+    QJsonArray ret = BasicOnOff::lsOptions().array();
+    QVariantMap map;
+    map.insert(keyName, "Temperature");
+    map.insert(keyValueType, "double");
+    map.insert(keyDesc, "Sets the thermostats temperature");
+
+    ret.append(QJsonObject::fromVariantMap(map));
+    return QJsonDocument(ret);
+}
+
 void Thermostat::turnOff()
 {
     hold = true;
