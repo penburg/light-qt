@@ -87,6 +87,9 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::toggleRelay, backend.get(), &Lights::toggle);
     QObject::connect(&console, &Console::setGpioChip, backend.get(), &Lights::setGpioChip);
 
+    QObject::connect(&console, &Console::lsDeviceOptions, backend.get(), &Lights::lsDeviceOptions);
+    QObject::connect(&console, &Console::setDeviceOption, backend.get(), &Lights::setDeviceOption);
+
 
 
     return a.exec();
