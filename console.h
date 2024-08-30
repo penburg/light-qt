@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSocketNotifier>
+#include <QJsonDocument>
 #include <iostream>
 #include <QDebug>
 #include <QProcess>
@@ -51,6 +52,8 @@ signals:
     string lsGpioInput();
     string lsEvapCooler();
     string lsEvapCoolerModes();
+    QJsonDocument lsDeviceOptions();
+    bool setDeviceOption(QString device, QString option, QVariant value);
     bool setRelay(QString name, QString state);
     bool toggleRelay(QString name);
     bool setPWMRate(QString name, int rate);
@@ -61,9 +64,9 @@ private:
     QStringList lastCommand;
 
     bool findCommand(QStringList commandList);
+    string setParse(QStringList commands);
     string configParse(QStringList commands);
     string configAddParse(QStringList commands);
-    string configSetParse(QStringList commands);
     string configAddOutput(QStringList commands);
     string configAddThermal(QStringList commands);
     string configAddNwsThermal(QStringList commands);
@@ -93,6 +96,7 @@ private:
     string globalEvapCoolerSetMode(QStringList commands);
     string lsGlobal();
     string lsConfig();
+    string jsonToString(QJsonDocument jd);
 
 
     string OK = "ok";

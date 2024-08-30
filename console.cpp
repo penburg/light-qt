@@ -52,6 +52,10 @@ bool Console::findCommand(QStringList commandList)
         cout << globalParse(commandList.mid(1)) << endl;
         ret = true;
     }
+    else if(commandList.at(0).compare("set", Qt::CaseSensitivity::CaseInsensitive) == 0){
+        cout << setParse(commandList.mid(1)) << endl;
+        ret = true;
+    }
     else if(commandList.at(0).compare(upKey) == 0){
         if(lastCommand.size() > 0 && lastCommand.at(0).compare(upKey) != 0){
             ret = findCommand(lastCommand);
@@ -70,9 +74,6 @@ string Console::configParse(QStringList commands)
     if(commands.size() > 0){
         if(commands.at(0).compare("add", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return configAddParse(commands.mid(1));
-        }
-        if(commands.at(0).compare("set", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return configSetParse(commands.mid(1));
         }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return "Avalable config Commands: add, set, help";
@@ -129,17 +130,28 @@ string Console::configAddParse(QStringList commands)
     return "\"config add help\" for useage";
 }
 
-string Console::configSetParse(QStringList commands)
+string Console::setParse(QStringList commands)
 {
     if(commands.size() > 0){
-        if(commands.at(0).compare("PWM", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return configSetPWM(commands.mid(1));
+        if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return "Useage: set <Device> <option> <value(s)> ...";
         }
-        else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable config set options: PWM";
+        else if(commands.size() >= 2){
+            QString device = commands.at(0);
+            QString option = commands.at(1);
+            QVariant value;
+            if(commands.size() == 3){
+                value = commands.at(2);
+            }
+            else{
+                value = commands.mid(2);
+            }
+            bool success = emit setDeviceOption(device, option, value);
+            return success ? OK : FAIL;
         }
     }
-    return "\"config add help\" for useage";
+
+    return "\"set help\" for useage";
 }
 
 string Console::configAddOutput(QStringList commands)
@@ -446,7 +458,6 @@ string Console::configSetGPIOChip(QStringList commands)
     }
 }
 
-
 string Console::ls(QStringList commands)
 {
     if(commands.size() > 0){
@@ -483,12 +494,15 @@ string Console::ls(QStringList commands)
         else if(commands.at(0).compare("evapCoolerModes", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return emit lsEvapCoolerModes();
         }
+        else if(commands.at(0).compare("deviceOptions", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return jsonToString(emit lsDeviceOptions());
+        }
         else{
             return "Not Found";
         }
     }
     else{
-        return "config\nBasicOnOff\nsunRiseSet\nthermalAlert\nthermalSensor\nglobalConfig\nevents\neventActions\ngpioInputs\nevapCooler\nevapCoolerModes";
+        return "config\nBasicOnOff\nDeviceOptions\nsunRiseSet\nthermalAlert\nthermalSensor\nglobalConfig\nevents\neventActions\ngpioInputs\nevapCooler\nevapCoolerModes";
     }
 }
 
@@ -508,7 +522,7 @@ string Console::turnParse(QStringList commands)
             return success ? OK : FAIL;
         }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "useage: turn <on|off> \"RelayName\"";
+            return "useage: turn <on|off|auto> \"RelayName\"";
         }
         else{
             return "\"turn help\" for useage";
@@ -538,7 +552,7 @@ string Console::toggleParse(QStringList commands)
 string Console::commandHelp(QStringList commands)
 {
     if(commands.size() == 0){
-        return "Avalable Commands: config, globalConfig, ls, toggle, turn <auto|on|off>, quit";
+        return "Avalable Commands: config, globalConfig, ls, toggle, turn , quit";
     }
 
     return "\"help\" for useage";
@@ -829,6 +843,12 @@ string Console::lsConfig()
     ret += emit lsThermalSensorConfig();
 
     return ret;
+}
+
+string Console::jsonToString(QJsonDocument jd)
+{
+    //to do make it look nice
+    return jd.toJson().toStdString();
 }
 
 void Console::readCommand() {
