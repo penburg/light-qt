@@ -1093,11 +1093,6 @@ bool Lights::setRelay(QString name, QString state)
     return false;
 }
 
-void Lights::sunRiseSetUpdated()
-{
-    setupSunRiseSet();
-}
-
 bool Lights::enableEvapCooler(bool enabled)
 {
     settings.beginGroup(Setting_EvapCooler);

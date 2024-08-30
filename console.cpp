@@ -583,9 +583,6 @@ string Console::globalSetParse(QStringList commands)
         if(commands.at(0).compare("thermalUnits", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return globalSetThermalUnits(commands.mid(1));
         }
-        else if(commands.at(0).compare("sunRiseSet", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalSetSunCalcs(commands.mid(1));
-        }
         else if(commands.at(0).compare("gpioChip", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return configSetGPIOChip(commands.mid(1));
         }
@@ -613,32 +610,6 @@ string Console::globalSetThermalUnits(QStringList commands)
         }
     }
     return "\"globalConfig set thermalUnits help\" for useage";
-}
-
-string Console::globalSetSunCalcs(QStringList commands)
-{
-    QSettings settings;
-    string useage = "useage: globalConfig set sunRiseSet <latitude = 40> <longitude = -105> <timeZone = -7>";
-    if(commands.size() == 3){
-        bool isLat, isLon, isTime;
-        double lat = commands.at(0).toDouble(&isLat);
-        double lon = commands.at(1).toDouble(&isLon);
-        int time = commands.at(2).toDouble(&isTime);
-        if(isLat && isLon && isTime){
-            settings.setValue(Setting_Latitude, lat);
-            settings.setValue(Setting_Longitude, lon);
-            settings.setValue(Setting_TimeZone, time);
-            emit sunRiseSetUpdated();
-            return OK;
-        }
-        else{
-            return useage;
-        }
-
-    }
-
-    return useage;
-
 }
 
 string Console::globalEvapCoolerParse(QStringList commands)

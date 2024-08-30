@@ -86,7 +86,6 @@ private:
     string globalParse(QStringList commands);
     string globalSetParse(QStringList commands);
     string globalSetThermalUnits(QStringList commands);
-    string globalSetSunCalcs(QStringList commands);
     string globalEvapCoolerParse(QStringList commands);
     string globalEvapCoolerEnable(QStringList commands);
     string globalEvapCoolerConfig(QStringList commands);

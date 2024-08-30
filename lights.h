@@ -76,7 +76,6 @@ public slots:
     bool addOnOffGroup(QString name, QStringList devices);
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
     bool setRelay(QString name, QString state);
-    void sunRiseSetUpdated();
     bool enableEvapCooler(bool enabled);
     bool setGpioChip(QString chipName);
 
