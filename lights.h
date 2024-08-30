@@ -46,7 +46,6 @@ public slots:
     bool turnOff(QString name);
     bool turnAuto(QString name);
     bool toggle(QString name);
-    bool setPWMRate(QString name, int rate);
     bool addGpioOutput(QString name, int line, QString init, QString act);
     bool addThermalSensor(QString name, QString path, int interval, double threshold, double errorValue);
     void addNwsSensor(QString name, QString station, int interval, double threshold);

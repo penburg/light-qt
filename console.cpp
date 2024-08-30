@@ -427,24 +427,6 @@ string Console::configAddGpioPWM(QStringList commands)
     }
 }
 
-string Console::configSetPWM(QStringList commands)
-{
-    string help = "useage: config set PWM \"Name of PWM\" <rate>(0-100)";
-    if(commands.size() == 2){
-        bool isInt;
-        QString name = commands.at(0);
-        int rate = commands.at(1).toInt(&isInt);
-        bool status = false;
-        if(isInt){
-            status = emit setPWMRate(name, rate);
-        }
-        return status ? OK : FAIL;
-    }
-    else{
-        return help;
-    }
-}
-
 string Console::ls(QStringList commands)
 {
     if(commands.size() > 0){

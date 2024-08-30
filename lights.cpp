@@ -146,19 +146,6 @@ bool Lights::toggle(QString name)
     }
 }
 
-bool Lights::setPWMRate(QString name, int rate)
-{
-    shared_ptr<GpioPWM> pwm = gpioPWMs->value(name, nullptr);
-    if(pwm != nullptr){
-        pwm->setRate(rate);
-        return true;
-    }
-    else{
-        qWarning()  << name << "Not Found";
-        return false;
-    }
-}
-
 bool Lights::addGpioOutput(QString name, int line, QString init, QString act)
 {
     int initial = QMetaEnum::fromType<BasicOnOff::STATE>().keyToValue(init.toUpper().toLocal8Bit());

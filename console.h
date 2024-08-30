@@ -56,7 +56,6 @@ signals:
     bool setDeviceOption(QString device, QString option, QVariant value);
     bool setRelay(QString name, QString state);
     bool toggleRelay(QString name);
-    bool setPWMRate(QString name, int rate);
 
 private:
     QSocketNotifier *notifier;
@@ -76,7 +75,6 @@ private:
     string configAddEventAction(QStringList commands);
     string configAddGpioInput(QStringList commands);
     string configAddGpioPWM(QStringList commands);
-    string configSetPWM(QStringList commands);
     string ls(QStringList commands);
     string turnParse(QStringList commands);
     string toggleParse(QStringList commands);
