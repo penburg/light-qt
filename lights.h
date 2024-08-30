@@ -57,7 +57,6 @@ public slots:
     bool configEvapCoolerFanCondition(QString condition, QString fanName, double temp);
     bool configEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
     bool configEvapCoolerFanFilter(int filterTime, int timeRemain);
-    bool configEvapCoolerSetMode(QString mode);
     std::string lsBasicOnOff();
     std::string lsGpioConfig();
     std::string lsThermalSensor();
@@ -111,7 +110,6 @@ private:
     bool activateEvapCoolerFanCondition(QString condition, QString fanName, double temp);
     bool activateEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
     bool activateEvapCoolerFanFilter(int filterTime, int timeRemain);
-    bool activateEvapCoolerSetMode(QString mode);
     bool activateGpioPwm(QString name, QString outputDev, int rate);
 
     void setupThermalSensors();

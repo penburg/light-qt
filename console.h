@@ -88,7 +88,6 @@ private:
     string globalEvapCoolerFanCondition(QStringList commands);
     string globalEvapCoolerPurgePump(QStringList commands);
     string globalEvapCoolerFanFilter(QStringList commands);
-    string globalEvapCoolerSetMode(QStringList commands);
     string lsGlobal();
     string lsConfig();
     string jsonToString(QJsonDocument jd);

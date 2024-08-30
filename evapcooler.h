@@ -52,6 +52,7 @@ public slots:
     virtual void setAuto() override;
 
 private:
+    QSettings settings;
     QString baseMessage = "EvapCooler: ";
     void tempChanged(double temp);
     void setFan(fanSpeed f);
@@ -84,6 +85,9 @@ private:
     bool isHighEnabled = false;
     fanSpeed fanState;
     Mode mode;
+
+    QString Setting_EvapCooler = "evapCooler";
+    QString Setting_EvapCooler_Mode = "mode";
 
 };
 

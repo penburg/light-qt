@@ -226,6 +226,9 @@ bool EvapCooler::setMode(const string &newMode)
     Mode m = static_cast<Mode>(allMode.keyToValue(newMode.c_str(), &valid));
     if(valid){
         mode = m;
+        settings.beginGroup(Setting_EvapCooler);
+        settings.setValue(Setting_EvapCooler_Mode, mode);
+        settings.endGroup();
     }
     return valid;
 }

@@ -564,13 +564,6 @@ bool Lights::activateEvapCoolerFanFilter(int filterTime, int timeRemain)
     return false;
 }
 
-bool Lights::activateEvapCoolerSetMode(QString mode)
-{
-    if(evapCooler != nullptr ){
-        return evapCooler->setMode(mode.toStdString());
-    }
-    return false;
-}
 
 bool Lights::activateGpioPwm(QString name, QString outputDev, int rate)
 {
@@ -803,7 +796,7 @@ void Lights::setupEvapCooler()
             //Mode
             QString mode = settings.value(Setting_EvapCooler_Mode, "").toString();
             if(!mode.isEmpty()){
-                activateEvapCoolerSetMode(mode);
+                evapCooler.get()->setMode(mode.toStdString());
             }
         }
 
@@ -1199,17 +1192,6 @@ bool Lights::configEvapCoolerFanFilter(int filterTime, int timeRemain)
         settings.setValue(Setting_EvapCooler_FilterLife, timeRemain);
         settings.setValue(Setting_EvapCooler_FilterTime, filterTime);
         settings.endGroup();
-        settings.endGroup();
-    }
-    return success;
-}
-
-bool Lights::configEvapCoolerSetMode(QString mode)
-{
-    bool success = activateEvapCoolerSetMode(mode);
-    if(success){
-        settings.beginGroup(Setting_EvapCooler);
-        settings.setValue(Setting_EvapCooler_Mode, mode);
         settings.endGroup();
     }
     return success;

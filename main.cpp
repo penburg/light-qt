@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::configEvapCoolerFanCondition, backend.get(), &Lights::configEvapCoolerFanCondition);
     QObject::connect(&console, &Console::configEvapCoolerFanFilter, backend.get(), &Lights::configEvapCoolerFanFilter);
     QObject::connect(&console, &Console::configEvapCoolerPurgePump, backend.get(), &Lights::configEvapCoolerPurgePump);
-    QObject::connect(&console, &Console::configEvapCoolerSetMode, backend.get(), &Lights::configEvapCoolerSetMode);
 
     QObject::connect(&console, &Console::lsBasicOnOff, backend.get(), &Lights::lsBasicOnOff);
     QObject::connect(&console, &Console::lsThermalSensor, backend.get(), &Lights::lsThermalSensor);

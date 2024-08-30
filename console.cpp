@@ -600,9 +600,6 @@ string Console::globalEvapCoolerParse(QStringList commands)
         else if(commands.at(0).compare("setFanFilter", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return globalEvapCoolerFanFilter(commands.mid(1));
         }
-        else if(commands.at(0).compare("setMode", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalEvapCoolerSetMode(commands.mid(1));
-        }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return help;
         }
@@ -730,20 +727,6 @@ string Console::globalEvapCoolerFanFilter(QStringList commands)
         if(commands.at(0).compare("resetTo", Qt::CaseSensitivity::CaseInsensitive) == 0){
             status = emit configEvapCoolerFanFilter(filterTime, filterLife);
         }
-        return status ? OK : FAIL;
-    }
-    else{
-        return help;
-    }
-}
-
-string Console::globalEvapCoolerSetMode(QStringList commands)
-{
-    string help = "useage: globalConfig evapCooler setMode <mode>";
-    if(commands.size() == 1){
-
-        bool status = emit configEvapCoolerSetMode(commands.at(0));
-
         return status ? OK : FAIL;
     }
     else{
