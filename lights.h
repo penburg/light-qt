@@ -30,7 +30,7 @@
 
 using namespace std;
 
-class Lights : public QThread
+class Lights : public QThread, public Settable
 {
     Q_OBJECT
 public:
@@ -70,6 +70,8 @@ public slots:
     std::string lsGpioInput();
     std::string lsEvapCooler();
     std::string lsEvapCoolerModes();
+    QJsonDocument lsDeviceOptions();
+    bool setDeviceOption(QString device, QString option, QVariant value);
     bool addAlarm(QString name, QString time, QString isDayNight);
     bool addOnOffGroup(QString name, QStringList devices);
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
@@ -125,6 +127,8 @@ private:
     void setupGpioInput();
     void setupEvapCooler();
     void setupPWMs();
+
+    bool updateLocation(QVariant location);
 
     QString Setting_GPIO_Enabled;
 
@@ -198,6 +202,11 @@ private:
 
     QString Setting_GPIO_PWM = "gpioPWM";
     QString Setting_GPIO_PWM_Rate = "rate";
+
+    // Settable interface
+public:
+    bool setOption(QString name, QVariant value) override;
+    QJsonDocument lsOptions() override;
 };
 
 #endif // LIGHTS_H

@@ -840,6 +840,46 @@ void Lights::setupPWMs()
     settings.endArray();
 }
 
+bool Lights::updateLocation(QVariant location)
+{
+    QVariantList list = location.toList();
+    if(list.size() == 2){
+        bool isLat, isLon;
+        double lat = list.at(0).toDouble(&isLat);
+        double lon = list.at(1).toDouble(&isLon);
+        if(isLat && isLon){
+            if(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180){
+                settings.setValue(Setting_Latitude, lat);
+                settings.setValue(Setting_Longitude, lon);
+                setupSunRiseSet();
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Lights::setOption(QString name, QVariant value)
+{
+    if(name.compare("Location", Qt::CaseInsensitive) == 0){
+        return updateLocation(value);
+    }
+    return false;
+}
+
+QJsonDocument Lights::lsOptions()
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(keyName, "Location");
+    map.insert(keyValueType, "List<double>");
+    map.insert(keyDesc, "Sets longitude and latitude for sunrise & sunset events");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 string Lights::lsBasicOnOff()
 {
     return lsStatusable(basicIOs);
@@ -938,6 +978,35 @@ string Lights::lsEvapCoolerModes()
     else{
         return "disabled\n";
     }
+}
+
+QJsonDocument Lights::lsDeviceOptions()
+{
+    QVariantMap ret;
+    ret.insert("Global", lsOptions().array());
+
+    QStringList keys = basicIOs->keys();
+    foreach(QString key, keys){
+        ret.insert(key, basicIOs->value(key)->lsOptions().array());
+    }
+    return QJsonDocument::fromVariant(ret);
+}
+
+bool Lights::setDeviceOption(QString device, QString option, QVariant value)
+{
+    if(device.compare("Global", Qt::CaseInsensitive) == 0){
+        return setOption(option, value);
+    }
+    else{
+        QStringList keys = basicIOs->keys();
+        foreach(QString key, keys){
+            if(key.compare(device, Qt::CaseInsensitive) == 0){
+                return basicIOs->value(key)->setOption(option, value);
+            }
+        }
+    }
+    qInfo() << "device not found";
+    return false;
 }
 
 bool Lights::addAlarm(QString name, QString time, QString isDayNight)
@@ -1132,8 +1201,6 @@ bool Lights::configEvapCoolerSetMode(QString mode)
     }
     return success;
 }
-
-
 
 void Lights::setupGpios()
 {
