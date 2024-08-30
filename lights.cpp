@@ -852,9 +852,22 @@ bool Lights::updateLocation(QVariant location)
                 settings.setValue(Setting_Latitude, lat);
                 settings.setValue(Setting_Longitude, lon);
                 setupSunRiseSet();
+                return true;
             }
-            return true;
+            return false;
         }
+    }
+    return false;
+}
+
+bool Lights::updateTimezone(QVariant zone)
+{
+    bool isInt;
+    int tz = zone.toInt(&isInt);
+    if(isInt && tz >= -12 && tz <= 12){
+        settings.setValue(Setting_TimeZone, tz);
+        setupSunRiseSet();
+        return true;
     }
     return false;
 }
@@ -863,6 +876,9 @@ bool Lights::setOption(QString name, QVariant value)
 {
     if(name.compare("Location", Qt::CaseInsensitive) == 0){
         return updateLocation(value);
+    }
+    else if(name.compare("TimeZone", Qt::CaseInsensitive) == 0){
+        return updateTimezone(value);
     }
     return false;
 }
@@ -875,6 +891,12 @@ QJsonDocument Lights::lsOptions()
     map.insert(keyName, "Location");
     map.insert(keyValueType, "List<double>");
     map.insert(keyDesc, "Sets longitude and latitude for sunrise & sunset events");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(keyName, "TimeZone");
+    map.insert(keyValueType, "int");
+    map.insert(keyDesc, "Sets timezone for sunrise & sunset events");
     ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);

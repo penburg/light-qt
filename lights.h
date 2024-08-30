@@ -128,6 +128,7 @@ private:
     void setupPWMs();
 
     bool updateLocation(QVariant location);
+    bool updateTimezone(QVariant zone);
 
     QString Setting_GPIO_Enabled;
 
