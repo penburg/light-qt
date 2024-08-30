@@ -880,6 +880,9 @@ bool Lights::setOption(QString name, QVariant value)
     else if(name.compare("TimeZone", Qt::CaseInsensitive) == 0){
         return updateTimezone(value);
     }
+    else if(name.compare("GPIOChip", Qt::CaseInsensitive) == 0){
+        return setGpioChip(value.toString());
+    }
     return false;
 }
 
@@ -897,6 +900,12 @@ QJsonDocument Lights::lsOptions()
     map.insert(keyName, "TimeZone");
     map.insert(keyValueType, "int");
     map.insert(keyDesc, "Sets timezone for sunrise & sunset events");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(keyName, "GPIOChip");
+    map.insert(keyValueType, "string");
+    map.insert(keyDesc, "Sets the gpio chip name to use");
     ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);

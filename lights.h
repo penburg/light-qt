@@ -77,7 +77,7 @@ public slots:
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
     bool setRelay(QString name, QString state);
     bool enableEvapCooler(bool enabled);
-    bool setGpioChip(QString chipName);
+
 
 
 private:
@@ -129,6 +129,7 @@ private:
 
     bool updateLocation(QVariant location);
     bool updateTimezone(QVariant zone);
+    bool setGpioChip(QString chipName);
 
     QString Setting_GPIO_Enabled;
 
