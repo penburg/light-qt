@@ -110,6 +110,10 @@ void Thermostat::setMinOnTime(int newMinOnTime)
 
 bool Thermostat::setOption(QString name, QVariant value)
 {
+    bool success = BasicOnOff::setOption(name, value);
+    if(success){
+        return success;
+    }
     if(name.compare("Temperature", Qt::CaseInsensitive) == 0 || name.compare("Temp", Qt::CaseInsensitive) == 0){
         bool isDouble = false;
         double temp = value.toDouble(&isDouble);

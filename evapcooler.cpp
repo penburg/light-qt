@@ -244,6 +244,11 @@ string EvapCooler::lsModes()
 
 bool EvapCooler::setOption(QString name, QVariant value)
 {
+    bool success = BasicOnOff::setOption(name, value);
+    if(success){
+        return success;
+    }
+
     if(name.compare("mode", Qt::CaseInsensitive) == 0){
         return setMode(value.toString().toStdString());
     }

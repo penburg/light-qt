@@ -89,6 +89,10 @@ QString GpioPWM::getStatus() const
 
 bool GpioPWM::setOption(QString name, QVariant value)
 {
+    bool success = BasicOnOff::setOption(name, value);
+    if(success){
+        return success;
+    }
     bool isInt = false;
     int r = value.toInt(&isInt);
     if(name.compare("pwm", Qt::CaseInsensitive) == 0 && isInt){
