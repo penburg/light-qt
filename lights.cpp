@@ -873,7 +873,7 @@ QJsonDocument Lights::lsOptions()
 
     map.insert(keyName, "Location");
     map.insert(keyValueType, "List<double>");
-    map.insert(keyDesc, "Sets longitude and latitude for sunrise & sunset events");
+    map.insert(keyDesc, "Sets latitude & longitude for sunrise & sunset events");
     ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
