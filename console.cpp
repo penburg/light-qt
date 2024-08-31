@@ -479,15 +479,15 @@ string Console::turnParse(QStringList commands)
 {
     if(commands.size() > 0){
         if(commands.at(0).compare("on", Qt::CaseSensitivity::CaseInsensitive) == 0 && commands.size() == 2){
-            bool success = emit setRelay(commands.at(1), "ON");
+            bool success = emit setDeviceOption(commands.at(1), "State", "ON");
             return success ? OK : FAIL;
         }
         else if(commands.at(0).compare("off", Qt::CaseSensitivity::CaseInsensitive) == 0 && commands.size() == 2){
-            bool success = emit setRelay(commands.at(1), "OFF");
+            bool success = emit setDeviceOption(commands.at(1), "State", "OFF");
             return success ? OK : FAIL;
         }
         else if(commands.at(0).compare("auto", Qt::CaseSensitivity::CaseInsensitive) == 0 && commands.size() == 2){
-            bool success = emit setRelay(commands.at(1), "AUTO");
+            bool success = emit setDeviceOption(commands.at(1), "State", "AUTO");
             return success ? OK : FAIL;
         }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){

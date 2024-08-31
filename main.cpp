@@ -80,7 +80,6 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::lsEvapCooler, backend.get(), &Lights::lsEvapCooler);
     QObject::connect(&console, &Console::lsEvapCoolerModes, backend.get(), &Lights::lsEvapCoolerModes);
 
-    QObject::connect(&console, &Console::setRelay, backend.get(), &Lights::setRelay);
     QObject::connect(&console, &Console::toggleRelay, backend.get(), &Lights::toggle);
 
     QObject::connect(&console, &Console::lsDeviceOptions, backend.get(), &Lights::lsDeviceOptions);

@@ -564,7 +564,6 @@ bool Lights::activateEvapCoolerFanFilter(int filterTime, int timeRemain)
     return false;
 }
 
-
 bool Lights::activateGpioPwm(QString name, QString outputDev, int rate)
 {
     shared_ptr<BasicOnOff> outDev = basicIOs->value(outputDev);
@@ -1095,21 +1094,6 @@ string Lights::lsStatusable(shared_ptr<QHash<QString, shared_ptr<T> > > hash)
 
     }
     return ret.trimmed().toStdString();
-}
-
-bool Lights::setRelay(QString name, QString state)
-{
-    if(state.compare("ON", Qt::CaseSensitivity::CaseInsensitive) == 0){
-        return turnOn(name);
-    }
-    else if(state.compare("OFF", Qt::CaseSensitivity::CaseInsensitive) == 0){
-        return turnOff(name);
-    }
-    else if(state.compare("AUTO", Qt::CaseSensitivity::CaseInsensitive) == 0){
-        return turnAuto(name);
-
-    }
-    return false;
 }
 
 bool Lights::enableEvapCooler(bool enabled)

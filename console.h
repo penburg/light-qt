@@ -54,7 +54,6 @@ signals:
     string lsEvapCoolerModes();
     QJsonDocument lsDeviceOptions();
     bool setDeviceOption(QString device, QString option, QVariant value);
-    bool setRelay(QString name, QString state);
     bool toggleRelay(QString name);
 
 private:
