@@ -78,8 +78,6 @@ private:
     string toggleParse(QStringList commands);
     string commandHelp(QStringList commands);
     string globalParse(QStringList commands);
-    string globalSetParse(QStringList commands);
-    string globalSetThermalUnits(QStringList commands);
     string globalEvapCoolerParse(QStringList commands);
     string globalEvapCoolerConfig(QStringList commands);
     string globalEvapCoolerFanCondition(QStringList commands);

@@ -837,7 +837,10 @@ bool Lights::setOption(QString name, QVariant value)
         return setGpioChip(value.toString());
     }
     else if(name.compare("EvapCoolerDisabled", Qt::CaseInsensitive) == 0){
-        return setGpioChip(value.toString());
+        return enableEvapCooler(value);
+    }
+    else if(name.compare("ThermalUnits", Qt::CaseInsensitive) == 0){
+        return setThermalUnits(value);
     }
     return false;
 }
@@ -868,6 +871,12 @@ QJsonDocument Lights::lsOptions()
     map.insert(keyName, "EvapCoolerDisabled");
     map.insert(keyValueType, "bool");
     map.insert(keyDesc, "Sets to true / false to disable / enable the EvapCooler");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(keyName, "ThermalUnits");
+    map.insert(keyValueType, "string");
+    map.insert(keyDesc, "Sets display thermal units to (C)elsius or (F)ahrenheit");
     ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);
@@ -1085,6 +1094,23 @@ bool Lights::enableEvapCooler(QVariant enabled)
     settings.setValue(Setting_EvapCooler, enabled.toBool());
     settings.endGroup();
     return true;
+}
+
+bool Lights::setThermalUnits(QVariant unit)
+{
+    QString u = unit.toString();
+    if(u.compare("c", Qt::CaseInsensitive) == 0 || u.compare("celsius", Qt::CaseInsensitive) == 0){
+        settings.setValue("useFahrenheit", false);
+        return true;
+    }
+    else if(u.compare("f", Qt::CaseInsensitive) == 0 || u.compare("fahrenheit", Qt::CaseInsensitive) == 0){
+        settings.setValue("useFahrenheit", true);
+        return true;
+    }
+    else{
+        return false;
+    }
+
 }
 
 bool Lights::setGpioChip(QString chipName)

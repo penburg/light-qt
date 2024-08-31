@@ -125,6 +125,7 @@ private:
     bool updateTimezone(QVariant zone);
     bool setGpioChip(QString chipName);
     bool enableEvapCooler(QVariant enabled);
+    bool setThermalUnits(QVariant unit);
 
     QString Setting_GPIO_Enabled;
 

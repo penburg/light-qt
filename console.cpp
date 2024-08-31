@@ -530,52 +530,17 @@ string Console::commandHelp(QStringList commands)
 string Console::globalParse(QStringList commands)
 {
     if(commands.size() > 0){
-        if(commands.at(0).compare("set", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalSetParse(commands.mid(1));
-        }
-        else if(commands.at(0).compare("evapCooler", Qt::CaseSensitivity::CaseInsensitive) == 0){
+        if(commands.at(0).compare("evapCooler", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return globalEvapCoolerParse(commands.mid(1));
         }
         else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable globalConfig Commands: evapCooler, help, set";
+            return "Avalable globalConfig Commands: evapCooler, help";
         }
 
     }
 
     return "\"globalConfig help\" for useage";
 
-}
-
-string Console::globalSetParse(QStringList commands)
-{
-    if(commands.size() > 0){
-        if(commands.at(0).compare("thermalUnits", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalSetThermalUnits(commands.mid(1));
-        }
-        else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return "Avalable globalConfig set options: thermalUnits";
-        }
-    }
-    return "\"globalConfig set help\" for useage";
-}
-
-string Console::globalSetThermalUnits(QStringList commands)
-{
-    QSettings settings;
-    if(commands.size() > 0){
-        if(commands.at(0).compare("c", Qt::CaseSensitivity::CaseInsensitive) == 0 || commands.at(0).compare("celsius", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            settings.setValue("useFahrenheit", false);
-            return "setting thermalUnits to celsius";
-        }
-        else if(commands.at(0).compare("f", Qt::CaseSensitivity::CaseInsensitive) == 0 || commands.at(0).compare("fahrenheit", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            settings.setValue("useFahrenheit", true);
-            return "setting thermalUnits to fahrenheit";
-        }
-        else{
-            return "useage: globalConfig set thermalUnits <c|celsius|f|fahrenheit>";
-        }
-    }
-    return "\"globalConfig set thermalUnits help\" for useage";
 }
 
 string Console::globalEvapCoolerParse(QStringList commands)
@@ -602,7 +567,6 @@ string Console::globalEvapCoolerParse(QStringList commands)
 
     return help;
 }
-
 
 string Console::globalEvapCoolerConfig(QStringList commands)
 {
