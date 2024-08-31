@@ -10,7 +10,7 @@ Lights::Lights(QObject *parent) : QThread(parent)
     catch (std::system_error& e){
         qWarning() << "Gpio Chip ERROR" << e.code().value() << "-" << e.what();
     }
-
+    evapCooler = nullptr;
     basicIOs = make_shared<QHash<QString, shared_ptr<BasicOnOff>>>();
     thermalSensors = make_shared<QHash<QString, shared_ptr<ThermalSensor>>>();
     thermostats = unique_ptr<QHash<QString, shared_ptr<Thermostat>>>(new QHash<QString, shared_ptr<Thermostat>>());
@@ -994,7 +994,12 @@ string Lights::lsEvapCoolerModes()
 QJsonDocument Lights::lsDeviceOptions()
 {
     QVariantMap ret;
+
     ret.insert("Global", lsOptions().array());
+
+    if(evapCooler != nullptr){
+        ret.insert("EvapCooler", evapCooler->lsOptions().array());
+    }
 
     QStringList keys = basicIOs->keys();
     foreach(QString key, keys){
@@ -1007,6 +1012,9 @@ bool Lights::setDeviceOption(QString device, QString option, QVariant value)
 {
     if(device.compare("Global", Qt::CaseInsensitive) == 0){
         return setOption(option, value);
+    }
+    else if(device.compare("EvapCooler", Qt::CaseInsensitive) == 0 && evapCooler != nullptr){
+        return evapCooler->setOption(option, value);
     }
     else{
         QStringList keys = basicIOs->keys();
