@@ -582,13 +582,7 @@ string Console::globalEvapCoolerParse(QStringList commands)
 {
     string help = "Avalable globalConfig evapCooler Commands: <enable|disable>, <config>, add<Fan|PurgePump>, setFanFilter, setMode";
     if(commands.size() > 0){
-        if(commands.at(0).compare("enable", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalEvapCoolerEnable(commands.mid(0));
-        }
-        else if(commands.at(0).compare("disable", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return globalEvapCoolerEnable(commands.mid(0));
-        }
-        else if(commands.at(0).compare("config", Qt::CaseSensitivity::CaseInsensitive) == 0){
+        if(commands.at(0).compare("config", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return globalEvapCoolerConfig(commands.mid(1));
         }
         else if(commands.at(0).compare("addFan", Qt::CaseSensitivity::CaseInsensitive) == 0){
@@ -609,26 +603,6 @@ string Console::globalEvapCoolerParse(QStringList commands)
     return help;
 }
 
-string Console::globalEvapCoolerEnable(QStringList commands)
-{
-    string help = "useage: globalConfig evapCooler <enable|disable>";
-    if(commands.size() > 0){
-        if(commands.at(0).compare("enable", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            bool status = emit enableEvapCooler(true);
-            return status ? OK : FAIL;
-        }
-        else if(commands.at(0).compare("disable", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            bool status = emit enableEvapCooler(false);
-            return status ? OK : FAIL;
-        }
-        else if(commands.at(0).compare("help", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return help;
-        }
-
-    }
-
-    return help;
-}
 
 string Console::globalEvapCoolerConfig(QStringList commands)
 {

@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::addGpioInput, backend.get(), &Lights::addGpioInput);
     QObject::connect(&console, &Console::addGpioPWM, backend.get(), &Lights::addGpioPWM);
 
-    QObject::connect(&console, &Console::enableEvapCooler, backend.get(), &Lights::enableEvapCooler);
     QObject::connect(&console, &Console::configEvapCooler, backend.get(), &Lights::configEvapCooler);
     QObject::connect(&console, &Console::configEvapCoolerFanCondition, backend.get(), &Lights::configEvapCoolerFanCondition);
     QObject::connect(&console, &Console::configEvapCoolerFanFilter, backend.get(), &Lights::configEvapCoolerFanFilter);

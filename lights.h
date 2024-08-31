@@ -73,7 +73,7 @@ public slots:
     bool addAlarm(QString name, QString time, QString isDayNight);
     bool addOnOffGroup(QString name, QStringList devices);
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
-    bool enableEvapCooler(bool enabled);
+
 
 
 
@@ -126,6 +126,7 @@ private:
     bool updateLocation(QVariant location);
     bool updateTimezone(QVariant zone);
     bool setGpioChip(QString chipName);
+    bool enableEvapCooler(QVariant enabled);
 
     QString Setting_GPIO_Enabled;
 

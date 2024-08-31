@@ -862,6 +862,9 @@ bool Lights::setOption(QString name, QVariant value)
     else if(name.compare("GPIOChip", Qt::CaseInsensitive) == 0){
         return setGpioChip(value.toString());
     }
+    else if(name.compare("EvapCoolerDisabled", Qt::CaseInsensitive) == 0){
+        return setGpioChip(value.toString());
+    }
     return false;
 }
 
@@ -885,6 +888,12 @@ QJsonDocument Lights::lsOptions()
     map.insert(keyName, "GPIOChip");
     map.insert(keyValueType, "string");
     map.insert(keyDesc, "Sets the gpio chip name to use");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(keyName, "EvapCoolerDisabled");
+    map.insert(keyValueType, "bool");
+    map.insert(keyDesc, "Sets to true / false to disable / enable the EvapCooler");
     ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);
@@ -1096,10 +1105,10 @@ string Lights::lsStatusable(shared_ptr<QHash<QString, shared_ptr<T> > > hash)
     return ret.trimmed().toStdString();
 }
 
-bool Lights::enableEvapCooler(bool enabled)
+bool Lights::enableEvapCooler(QVariant enabled)
 {
     settings.beginGroup(Setting_EvapCooler);
-    settings.setValue(Setting_EvapCooler, enabled);
+    settings.setValue(Setting_EvapCooler, enabled.toBool());
     settings.endGroup();
     return true;
 }

@@ -35,7 +35,6 @@ signals:
     bool addEventAction(QString name, QString event, QString device, QString state, bool oneShot);
     bool addGpioInput(QString name, int line, QString edge, bool activeLow = false);
     bool addGpioPWM(QString name, QString outputDev, int rate);
-    bool enableEvapCooler(bool enabled);
     bool configEvapCooler(QString name, QString sensor, QString pump, QString fan, int fanDelay);
     bool configEvapCoolerFanCondition(QString condition, QString fanName, double temp);
     bool configEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
@@ -82,7 +81,6 @@ private:
     string globalSetParse(QStringList commands);
     string globalSetThermalUnits(QStringList commands);
     string globalEvapCoolerParse(QStringList commands);
-    string globalEvapCoolerEnable(QStringList commands);
     string globalEvapCoolerConfig(QStringList commands);
     string globalEvapCoolerFanCondition(QStringList commands);
     string globalEvapCoolerPurgePump(QStringList commands);
