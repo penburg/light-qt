@@ -42,8 +42,6 @@ public:
 public slots:
     void runTest();
 
-    bool turnOn(QString name);
-    bool turnOff(QString name);
     bool turnAuto(QString name);
     bool toggle(QString name);
     bool addGpioOutput(QString name, int line, QString init, QString act);

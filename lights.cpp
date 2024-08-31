@@ -94,33 +94,6 @@ void Lights::runTest()
 
 }
 
-bool Lights::turnOn(QString name)
-{
-    shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);
-    if(pin != nullptr){
-        pin->turnOn();
-        return true;
-    }
-    else{
-        qWarning() << name << "Not Found";
-        return false;
-    }
-
-}
-
-bool Lights::turnOff(QString name)
-{
-    shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);
-    if(pin != nullptr){
-        pin->turnOff();
-        return true;
-    }
-    else{
-        qWarning() << name << "Not Found";
-        return false;
-    }
-}
-
 bool Lights::turnAuto(QString name)
 {
     shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);
@@ -138,7 +111,8 @@ bool Lights::toggle(QString name)
 {
     shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);
     if(pin != nullptr){
-        return pin->getState() == BasicOnOff::STATE::ON ? turnOff(name) : turnOn(name);
+        pin->getState() == BasicOnOff::STATE::ON ? pin->turnOff() : pin->turnOn();
+        return true;
     }
     else{
         qWarning() << name << "Not Found";
