@@ -94,19 +94,6 @@ void Lights::runTest()
 
 }
 
-bool Lights::turnAuto(QString name)
-{
-    shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);
-    if(pin != nullptr){
-        pin->setAuto();
-        return true;
-    }
-    else{
-        qWarning() << name << "Not Found";
-        return false;
-    }
-}
-
 bool Lights::toggle(QString name)
 {
     shared_ptr<BasicOnOff> pin = basicIOs->value(name, nullptr);

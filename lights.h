@@ -42,7 +42,6 @@ public:
 public slots:
     void runTest();
 
-    bool turnAuto(QString name);
     bool toggle(QString name);
     bool addGpioOutput(QString name, int line, QString init, QString act);
     bool addThermalSensor(QString name, QString path, int interval, double threshold, double errorValue);
