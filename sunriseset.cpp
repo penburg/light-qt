@@ -197,6 +197,55 @@ bool SunRiseSet::validTime(QString time)
     return false;
 }
 
+QJsonDocument SunRiseSet::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    QDateTime dateObj = QDateTime::currentDateTime();
+
+    map.insert(sKeyName, "Current Time");
+    map.insert(sKeyValue, SunRiseSet::formatTime(dateObj.toSecsSinceEpoch()));
+    map.insert(sKeyDesc, "The current time");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Sun Rise");
+    map.insert(sKeyValue, SunRiseSet::formatTime(getSunRise()));
+    map.insert(sKeyDesc, "Todays sun rise time");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Sun Set");
+    map.insert(sKeyValue, SunRiseSet::formatTime(getSunSet()));
+    map.insert(sKeyDesc, "Todays sun set time");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    if(conditionalSunRiseTime.isEmpty()){
+        map.clear();
+        map.insert(sKeyName, "Conditional Sun Rise");
+        map.insert(sKeyValue, conditionalSunRiseTime);
+        map.insert(sKeyDesc, "Emit Rise if after this time " );
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+    if(conditionalSunRiseTime.isEmpty()){
+        map.clear();
+        map.insert(sKeyName, "Conditional Sun Set");
+        map.insert(sKeyValue, conditionalSunSetTime);
+        map.insert(sKeyDesc, "Emit Set if afterthis time ");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+
+    map.clear();
+    map.insert(sKeyName, "SunStatus");
+    map.insert(sKeyValue, constIsDay() ? "Day" : "Night");
+    map.insert(sKeyDesc, "Is it currently Day or Night");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+
+    return QJsonDocument(ret);
+}
+
 const shared_ptr<ActionEvent> &SunRiseSet::getConditionalSetAction() const
 {
     return conditionalSetAction;

@@ -33,7 +33,9 @@ public:
     const shared_ptr<ActionEvent> &getConditionalRiseAction() const;
 
     static bool validTime(QString time);
-    QString getStatus() const;
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
 
 public slots:
     void reCalc();
@@ -67,7 +69,6 @@ private:
     shared_ptr<ActionEvent> riseAction;
     shared_ptr<ActionEvent> conditionalSetAction;
     shared_ptr<ActionEvent> conditionalRiseAction;
-
 
 
 };
