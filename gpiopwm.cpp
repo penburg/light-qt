@@ -83,8 +83,29 @@ QString GpioPWM::getStatus() const
     QString ret = BasicOnOff::getStatus();
     ret += "\tRate: " + QString::number(rate) + "\n";
     ret += "\tW/R time: " + QString::number(workTime) + "/" + QString::number(restTime) + "\n";
-    ret += "read: " + QString::number(workTimer->interval()) + "/" + QString::number(restTimer->interval()) + "\n";
     return ret;
+}
+
+QJsonDocument GpioPWM::jsonStatus() const
+{
+    QJsonArray ret = BasicOnOff::jsonStatus().array();
+    QVariantMap map;
+    map.clear();
+    map.insert(sKeyName, "Rate");
+    map.insert(sKeyValue, QString::number(rate));
+    map.insert(sKeyDesc, "The requested work rate");
+
+    map.clear();
+    map.insert(sKeyName, "WorkTime");
+    map.insert(sKeyValue, QString::number(workTime));
+    map.insert(sKeyDesc, "The actual time in ms to work");
+
+    map.clear();
+    map.insert(sKeyName, "RestTime");
+    map.insert(sKeyValue, QString::number(restTime));
+    map.insert(sKeyDesc, "The actual time in ms to rest");
+
+    return QJsonDocument(ret);
 }
 
 bool GpioPWM::setOption(QString name, QVariant value)
