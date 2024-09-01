@@ -2,6 +2,8 @@
 #define ACTIONEVENT_H
 
 #include <QObject>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include "statusable.h"
 
@@ -11,10 +13,12 @@ class ActionEvent : public QObject, public Statusable
 public:
     ActionEvent(QString n);
     void emitEvent();
-    QString getStatus() const;
     const QString &getName() const;
-
     void setExtraText(const QString &newExtraText);
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
 
 signals:
     void onEvent(QString name);
@@ -22,6 +26,7 @@ signals:
 private:
     QString name;
     QString extraText;
+
 };
 
 #endif // ACTIONEVENT_H

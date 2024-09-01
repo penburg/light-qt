@@ -29,3 +29,25 @@ void ActionEvent::setExtraText(const QString &newExtraText)
 {
     extraText = newExtraText;
 }
+
+QJsonDocument ActionEvent::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(sKeyName, "Name");
+    map.insert(sKeyValue, name);
+    map.insert(sKeyDesc, "The event name");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    if(!extraText.isEmpty()){
+        map.clear();
+        map.insert(sKeyName, "ExtraText");
+        map.insert(sKeyValue, extraText);
+        map.insert(sKeyDesc, "The extra text for the event");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+
+
+    return QJsonDocument(ret);
+}
