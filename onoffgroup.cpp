@@ -29,6 +29,7 @@ QJsonDocument OnOffGroup::jsonStatus() const
         map.insert(sKeyName, d->getName());
         map.insert(sKeyValue, d->jsonStatus());
         map.insert(sKeyDesc, "Controlled device status");
+        ret.append(QJsonObject::fromVariantMap(map));
     }
 
     return QJsonDocument(ret);

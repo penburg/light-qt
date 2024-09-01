@@ -146,36 +146,43 @@ QJsonDocument Thermostat::jsonStatus() const
     map.insert(sKeyName, "Mode");
     map.insert(sKeyValue, QString(QMetaEnum::fromType<Thermostat::MODE>().valueToKey(mode)));
     map.insert(sKeyDesc, "Thermstat mode, heating or cooling");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "TargetTemperature");
     map.insert(sKeyValue, ThermalSensor::getFormatedTemp(targetTemp));
     map.insert(sKeyDesc, "The requested temperature");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "TemperatureVariance");
     map.insert(sKeyValue, ThermalSensor::getFormatedValue(tempThreshold));
     map.insert(sKeyDesc, "When to turn on / off the thermostat +- this value");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "CurrentTemperature");
     map.insert(sKeyValue, ThermalSensor::getFormatedTemp(sensor->getLastRead()));
     map.insert(sKeyDesc, "The last reported temperature");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "MinOn");
     map.insert(sKeyValue, QString::number(minOnTime));
     map.insert(sKeyDesc, "Minimum time to remain on");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "MinOff");
     map.insert(sKeyValue, QString::number(minOffTime));
     map.insert(sKeyDesc, "Minimum time to remain off");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "DeviceStatus");
     map.insert(sKeyValue, ioDevice->jsonStatus());
     map.insert(sKeyDesc, "Status of the controled device");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);
 }

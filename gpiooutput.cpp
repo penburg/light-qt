@@ -50,6 +50,7 @@ QJsonDocument GpioOutput::jsonStatus() const
     map.insert(sKeyName, "Active");
     map.insert(sKeyValue, QString(QMetaEnum::fromType<GpioOutput::VALUE>().valueToKey(line->get_value())));
     map.insert(sKeyDesc, "The active state of the output device");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);
 }

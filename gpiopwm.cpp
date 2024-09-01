@@ -94,16 +94,19 @@ QJsonDocument GpioPWM::jsonStatus() const
     map.insert(sKeyName, "Rate");
     map.insert(sKeyValue, QString::number(rate));
     map.insert(sKeyDesc, "The requested work rate");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "WorkTime");
     map.insert(sKeyValue, QString::number(workTime));
     map.insert(sKeyDesc, "The actual time in ms to work");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     map.clear();
     map.insert(sKeyName, "RestTime");
     map.insert(sKeyValue, QString::number(restTime));
     map.insert(sKeyDesc, "The actual time in ms to rest");
+    ret.append(QJsonObject::fromVariantMap(map));
 
     return QJsonDocument(ret);
 }
