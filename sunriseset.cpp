@@ -221,18 +221,18 @@ QJsonDocument SunRiseSet::jsonStatus() const
     map.insert(sKeyDesc, "Todays sun set time");
     ret.append(QJsonObject::fromVariantMap(map));
 
-    if(conditionalSunRiseTime.isEmpty()){
+    if(!conditionalSunRiseTime.isEmpty()){
         map.clear();
         map.insert(sKeyName, "Conditional Sun Rise");
         map.insert(sKeyValue, conditionalSunRiseTime);
         map.insert(sKeyDesc, "Emit Rise if after this time " );
         ret.append(QJsonObject::fromVariantMap(map));
     }
-    if(conditionalSunRiseTime.isEmpty()){
+    if(!conditionalSunRiseTime.isEmpty()){
         map.clear();
         map.insert(sKeyName, "Conditional Sun Set");
         map.insert(sKeyValue, conditionalSunSetTime);
-        map.insert(sKeyDesc, "Emit Set if afterthis time ");
+        map.insert(sKeyDesc, "Emit Set if after this time ");
         ret.append(QJsonObject::fromVariantMap(map));
     }
 
