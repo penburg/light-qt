@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QMetaEnum>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <memory>
 #include "statusable.h"
 #include "actionevent.h"
@@ -17,8 +19,10 @@ public:
     explicit EventToAction(QString n, shared_ptr<ActionEvent> e, BasicOnOff::STATE s, shared_ptr<BasicOnOff> a, shared_ptr<QHash<QString, shared_ptr<EventToAction>>> p, QObject *pnt = nullptr);
     void setOneShot(bool shot = true);
 
-public slots:
-    QString getStatus() const;
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
+
 
 signals:
     void onComplete(QString msg);
@@ -33,6 +37,8 @@ private:
 
 private slots:
     void onAction(QString eventName);
+
+
 
 };
 
