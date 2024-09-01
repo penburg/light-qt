@@ -42,6 +42,18 @@ void GpioOutput::turnOff()
     state = STATE::OFF;
 }
 
+QJsonDocument GpioOutput::jsonStatus() const
+{
+    QJsonArray ret = BasicOnOff::jsonStatus().array();
+    QVariantMap map;
+    map.clear();
+    map.insert(sKeyName, "Active");
+    map.insert(sKeyValue, QString(QMetaEnum::fromType<GpioOutput::VALUE>().valueToKey(line->get_value())));
+    map.insert(sKeyDesc, "The active state of the output device");
+
+    return QJsonDocument(ret);
+}
+
 QString GpioOutput::getStatus() const
 {
     QString ret = BasicOnOff::getStatus();;

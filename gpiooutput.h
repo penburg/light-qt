@@ -29,18 +29,23 @@ public:
     ~GpioOutput();
     void varDump();
     friend ostream& operator<<(ostream& os, const GpioOutput& obj);
-
     const QString &getName() const;
     int getCurrentValue() const;
-    virtual QString getStatus() const;
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    virtual QString getStatus() const override;
+
 
 public slots:
-    void turnOn();
-    void turnOff();
+    void turnOn() override;
+    void turnOff() override;
 
 
 private:
     unique_ptr<gpiod::line> line;
+
+
 };
 
 #endif // GPIOOUTPUT_H
