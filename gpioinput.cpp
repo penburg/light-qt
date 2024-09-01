@@ -52,6 +52,20 @@ void GpioInput::emitState()
     thread->triggerState();
 }
 
+QJsonDocument GpioInput::jsonStatus() const
+{
+    QJsonArray ret = ActionEvent::jsonStatus().array();
+    QVariantMap map;
+
+    map.insert(sKeyName, "ThreadStatus");
+    map.insert(sKeyValue, thread->jsonStatus());
+    map.insert(sKeyDesc, "The input thread status");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+
+    return QJsonDocument(ret);
+}
+
 const shared_ptr<ActionEvent> &GpioInput::getActiveEvent() const
 {
     return activeEvent;

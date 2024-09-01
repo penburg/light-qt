@@ -4,6 +4,8 @@
 #include <QThread>
 #include <QObject>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <gpiod.hpp>
 #include "statusable.h"
 #include <memory>
@@ -24,9 +26,12 @@ public:
     ~GpioInputThread();
     void run() override;
     void shutdown();
-    QString getStatus() const override;
     int getValue() const;
     void triggerState();
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
 
 signals:
     void onEvent(QString name);

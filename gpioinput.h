@@ -26,16 +26,22 @@ public:
     GpioInput(QString n, gpiod::line l, EDGE e, bool activeLow = false);
     ~GpioInput();
     void shutdown();
-    QString getStatus() const override;
     const shared_ptr<ActionEvent> &getActiveEvent() const;
     const shared_ptr<ActionEvent> &getInactiveEvent() const;
     void emitState();
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
+
 
 private:
     void transferEvent(QString msg);
     shared_ptr<GpioInputThread> thread;
     shared_ptr<ActionEvent> activeEvent;
     shared_ptr<ActionEvent> inactiveEvent;
+
+
 
 };
 

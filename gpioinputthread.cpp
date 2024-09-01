@@ -81,6 +81,25 @@ void GpioInputThread::triggerState()
     }
 }
 
+QJsonDocument GpioInputThread::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(sKeyName, "Name");
+    map.insert(sKeyValue, name);
+    map.insert(sKeyDesc, "The input device name");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Line");
+    map.insert(sKeyValue, getValue() == 1 ? "Active" : "Inactive");
+    map.insert(sKeyDesc, "Current state of the input line");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 int GpioInputThread::convertEdge(EDGE e)
 {
     switch(e){
