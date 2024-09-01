@@ -82,6 +82,25 @@ void ThermalSensor::setErrorValue(int newErrorValue)
     errorValue = newErrorValue;
 }
 
+QJsonDocument ThermalSensor::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(sKeyName, "Name");
+    map.insert(sKeyValue, name);
+    map.insert(sKeyDesc, "The sensor name");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Temperature");
+    map.insert(sKeyValue, getFormatedTemp(lastRead));
+    map.insert(sKeyDesc, "The latest temperatue detected");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 void ThermalSensor::readSensor()
 {
     qWarning() << "Reading sensor from base class";

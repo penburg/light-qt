@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QMetaEnum>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <memory>
 #include "actionevent.h"
 #include "alerttype.h"
@@ -18,11 +20,14 @@ public:
     explicit ThermalAlert(QString n, double threshold, bool greater, QObject *parent = nullptr);
     void setWarningTemp(double newWarningTemp);
     void setCriticalTemp(double newCriticalTemp);
-    QString getStatus() const;
     const shared_ptr<ActionEvent> &getAlarmedEvent() const;
     const shared_ptr<ActionEvent> &getWarningEvent() const;
     const shared_ptr<ActionEvent> &getCriticalEvent() const;
     const shared_ptr<ActionEvent> &getNormalizedEvent() const;
+
+    // Statusable interface
+    QString getStatus() const override;
+    QJsonDocument jsonStatus() const override;
 
 public slots:
     void tempChanged(double temp);
@@ -47,6 +52,8 @@ private:
     AlertType::Thermal activeAlert;
     AlertType::Thermal checkTemp(double left, double right, AlertType::Thermal ret);
     void sendActionEvent(AlertType::Thermal type);
+
+
 
 
 
