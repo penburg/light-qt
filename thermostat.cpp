@@ -89,7 +89,7 @@ void Thermostat::requestOn()
 
 void Thermostat::requestOff()
 {
-   // qInfo() << "requesting Off";
+    // qInfo() << "requesting Off";
     QDateTime now = QDateTime::currentDateTime();
     int diff = now.toSecsSinceEpoch() - onTime;
     if(diff > minOnTime){
@@ -134,6 +134,49 @@ QJsonDocument Thermostat::lsOptions()
     map.insert(keyDesc, "Sets the thermostats temperature");
 
     ret.append(QJsonObject::fromVariantMap(map));
+    return QJsonDocument(ret);
+}
+
+QJsonDocument Thermostat::jsonStatus() const
+{
+    QJsonArray ret = BasicOnOff::jsonStatus().array();
+    QVariantMap map;
+
+    map.clear();
+    map.insert(sKeyName, "Mode");
+    map.insert(sKeyValue, QString(QMetaEnum::fromType<Thermostat::MODE>().valueToKey(mode)));
+    map.insert(sKeyDesc, "Thermstat mode, heating or cooling");
+
+    map.clear();
+    map.insert(sKeyName, "TargetTemperature");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(targetTemp));
+    map.insert(sKeyDesc, "The requested temperature");
+
+    map.clear();
+    map.insert(sKeyName, "TemperatureVariance");
+    map.insert(sKeyValue, ThermalSensor::getFormatedValue(tempThreshold));
+    map.insert(sKeyDesc, "When to turn on / off the thermostat +- this value");
+
+    map.clear();
+    map.insert(sKeyName, "CurrentTemperature");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(sensor->getLastRead()));
+    map.insert(sKeyDesc, "The last reported temperature");
+
+    map.clear();
+    map.insert(sKeyName, "MinOn");
+    map.insert(sKeyValue, QString::number(minOnTime));
+    map.insert(sKeyDesc, "Minimum time to remain on");
+
+    map.clear();
+    map.insert(sKeyName, "MinOff");
+    map.insert(sKeyValue, QString::number(minOffTime));
+    map.insert(sKeyDesc, "Minimum time to remain off");
+
+    map.clear();
+    map.insert(sKeyName, "DeviceStatus");
+    map.insert(sKeyValue, ioDevice->jsonStatus());
+    map.insert(sKeyDesc, "Status of the controled device");
+
     return QJsonDocument(ret);
 }
 

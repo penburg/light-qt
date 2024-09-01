@@ -23,15 +23,17 @@ public:
     Q_ENUM(MODE);
 
     explicit Thermostat(QString n, shared_ptr<ThermalSensor> s, shared_ptr<BasicOnOff> device, double target, double threshold, MODE m);
-
     ~Thermostat();
-
-    QString getStatus() const override;
     void setMinOffTime(int newMinOffTime);
     void setMinOnTime(int newMinOnTime);
+
     // Settable interface
     bool setOption(QString name, QVariant value) override;
     QJsonDocument lsOptions() override;
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
 
 public slots:
     void turnOff() override;
