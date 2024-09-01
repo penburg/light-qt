@@ -22,13 +22,17 @@ public:
 
     Q_ENUM(STATE)
     BasicOnOff(QString n);
-    virtual QString getStatus() const override;
+
     STATE getState() const;
     const QString &getName() const;
 
     // Settable interface
     bool setOption(QString name, QVariant value) override;
     QJsonDocument lsOptions() override;
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    virtual QString getStatus() const override;
 
 public slots:
     virtual void turnOn() = 0;
@@ -39,6 +43,8 @@ public slots:
 protected:
     STATE state;
     QString name;
+
+
 
 
 };

@@ -52,6 +52,25 @@ QJsonDocument BasicOnOff::lsOptions()
     return QJsonDocument(ret);
 }
 
+QJsonDocument BasicOnOff::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(sKeyName, "Name");
+    map.insert(sKeyValue, name);
+    map.insert(sKeyDesc, "The device name");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "State");
+    map.insert(sKeyValue, state);
+    map.insert(sKeyDesc, "Curent state of the on / off device");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 QString BasicOnOff::getStatus() const
 {
     QString ret;
