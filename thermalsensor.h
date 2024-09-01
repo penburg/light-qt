@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QFile>
 #include <QSettings>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QDebug>
 #include <memory>
 
@@ -24,9 +26,12 @@ public:
     double getLastRead() const;
     static QString getFormatedTemp(double t);
     static QString getFormatedValue(double t);
-    virtual QString getStatus() const;
-
     void setErrorValue(int newErrorValue);
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    virtual QString getStatus() const override;
+
 
 public slots:
     virtual void readSensor();
@@ -46,10 +51,9 @@ private:
     int interval;
     double threashold;
     double lastReported;
-
-
-
     unique_ptr<QTimer> timer;
+
+
 };
 
 #endif // THERMALSENSOR_H

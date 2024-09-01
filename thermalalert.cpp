@@ -45,6 +45,55 @@ QString ThermalAlert::getStatus() const
     return ret;
 }
 
+QJsonDocument ThermalAlert::jsonStatus() const
+{
+    QJsonArray ret;
+    QVariantMap map;
+
+    map.insert(sKeyName, "Name");
+    map.insert(sKeyValue, name);
+    map.insert(sKeyDesc, "The alert name");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Last Temp");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(lastTemp));
+    map.insert(sKeyDesc, "The latest temperatue received");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Alert Status");
+    map.insert(sKeyValue, QMetaEnum::fromType<AlertType::Thermal>().valueToKey(activeAlert));
+    map.insert(sKeyDesc, "Current status of the alert");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Mode");
+    map.insert(sKeyValue, greaterThan ? "Greater Than" : "Less Than");
+    map.insert(sKeyDesc, "Which direction the alert follows");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Alert Temp");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(thresholdTemp));
+    map.insert(sKeyDesc, "The threshold to activate the alert");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Warning Temp");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(warningTemp));
+    map.insert(sKeyDesc, "The threshold to activate the warning alert");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Critical Temp");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(warningTemp));
+    map.insert(sKeyDesc, "The threshold to activate the critical alert");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+
 void ThermalAlert::tempChanged(double temp)
 {
     AlertType::Thermal alert = AlertType::Thermal::None;
