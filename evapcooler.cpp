@@ -219,6 +219,82 @@ QJsonDocument EvapCooler::lsOptions()
     return QJsonDocument(ret);
 }
 
+QJsonDocument EvapCooler::jsonStatus() const
+{
+    QJsonArray ret = BasicOnOff::jsonStatus().array();
+    QVariantMap map;
+
+
+    map.insert(sKeyName, "Mode");
+    map.insert(sKeyValue, QString(QMetaEnum::fromType<EvapCooler::Mode>().valueToKey(mode)));
+    map.insert(sKeyDesc, "The cooling mode");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Temperature");
+    map.insert(sKeyValue, ThermalSensor::getFormatedTemp(sensor->getLastRead()));
+    map.insert(sKeyDesc, "The last reported temperature");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "PumpStatus");
+    map.insert(sKeyValue, pump->jsonStatus());
+    map.insert(sKeyDesc, "Status of the pump device");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "LowFanStatus");
+    map.insert(sKeyValue, fanLow->jsonStatus());
+    map.insert(sKeyDesc, "Status of the low speed fan");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    if(isMedEnabled){
+        map.clear();
+        map.insert(sKeyName, "MedFanStatus");
+        map.insert(sKeyValue, fanMed->jsonStatus());
+        map.insert(sKeyDesc, "Status of the medium speed fan");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+
+    if(isHighEnabled){
+        map.clear();
+        map.insert(sKeyName, "HighFanStatus");
+        map.insert(sKeyValue, fanHigh->jsonStatus());
+        map.insert(sKeyDesc, "Status of the high speed fan");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+
+    if(purgeInterval > 0){
+        map.clear();
+        map.insert(sKeyName, "PurgeInterval");
+        map.insert(sKeyValue, QString::number(purgeInterval / 1000));
+        map.insert(sKeyDesc, "How long between purge cycles");
+        ret.append(QJsonObject::fromVariantMap(map));
+
+        map.clear();
+        map.insert(sKeyName, "PurgeTime");
+        map.insert(sKeyValue, QString::number(purgeTime / 1000));
+        map.insert(sKeyDesc, "How long to run the purge pump");
+        ret.append(QJsonObject::fromVariantMap(map));
+
+        map.clear();
+        map.insert(sKeyName, "PurgePumpStatus");
+        map.insert(sKeyValue, purgePump->jsonStatus());
+        map.insert(sKeyDesc, "Status of the purge pump");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+    if(filterTime > std::numeric_limits<int>::min() && filterReminder < std::numeric_limits<int>::max()){
+        double usedPercent = (double)filterReminder / (double)filterTime;
+        map.clear();
+        map.insert(sKeyName, "FilterStatus");
+        map.insert(sKeyValue, QString::number(usedPercent * 100));
+        map.insert(sKeyDesc, "Percentage of filter lifre remaining");
+        ret.append(QJsonObject::fromVariantMap(map));
+    }
+
+    return QJsonDocument(ret);
+}
+
 bool EvapCooler::setMode(const string &newMode)
 {
     bool valid = false;

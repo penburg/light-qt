@@ -28,7 +28,7 @@ public:
     };
     Q_ENUM(Mode);
     EvapCooler(QString n, shared_ptr<ThermalSensor> s, shared_ptr<BasicOnOff> p, shared_ptr<BasicOnOff> f, int fanD);
-    virtual QString getStatus() const override;
+
     void setMedCondition(shared_ptr<BasicOnOff> f, double temp);
     void setHighCondition(shared_ptr<BasicOnOff> f, double temp);
     void setPurgePump(const shared_ptr<BasicOnOff> &newPurgePump, const int newPurgeTime, const int newPurgeInterval);
@@ -41,6 +41,11 @@ public:
     // Settable interface
     bool setOption(QString name, QVariant value) override;
     QJsonDocument lsOptions() override;
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    virtual QString getStatus() const override;
+
 
 signals:
     void filterIsDue();
