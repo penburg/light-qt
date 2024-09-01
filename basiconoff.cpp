@@ -64,7 +64,7 @@ QJsonDocument BasicOnOff::jsonStatus() const
 
     map.clear();
     map.insert(sKeyName, "State");
-    map.insert(sKeyValue, state);
+    map.insert(sKeyValue, QString(QMetaEnum::fromType<BasicOnOff::STATE>().valueToKey(state)));
     map.insert(sKeyDesc, "Curent state of the on / off device");
     ret.append(QJsonObject::fromVariantMap(map));
 
