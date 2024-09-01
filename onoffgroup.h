@@ -11,17 +11,18 @@ class OnOffGroup : public BasicOnOff
 {
 public:
     OnOffGroup(QString name);
-    QString getStatus() const;
     void addDevice(shared_ptr<BasicOnOff> d);
 
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
+
 public slots:
-    void turnOn();
-    void turnOff();
+    void turnOn() override;
+    void turnOff() override;
 
 private:
     vector<shared_ptr<BasicOnOff>> devices;
-
-
 };
 
 #endif // ONOFFGROUP_H

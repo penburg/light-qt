@@ -20,6 +20,20 @@ void OnOffGroup::addDevice(shared_ptr<BasicOnOff> d)
     devices.push_back(d);
 }
 
+QJsonDocument OnOffGroup::jsonStatus() const
+{
+    QJsonArray ret = BasicOnOff::jsonStatus().array();
+    QVariantMap map;
+    for(const shared_ptr<BasicOnOff> &d : devices){
+        map.clear();
+        map.insert(sKeyName, d->getName());
+        map.insert(sKeyValue, d->jsonStatus());
+        map.insert(sKeyDesc, "Controlled device status");
+    }
+
+    return QJsonDocument(ret);
+}
+
 void OnOffGroup::turnOn()
 {
     for(const shared_ptr<BasicOnOff> &d : devices){
