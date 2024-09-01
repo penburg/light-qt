@@ -57,3 +57,28 @@ void AlarmEvent::setDayNight(bool isDay)
     dayNightCondition = isDay;
 }
 
+QJsonDocument AlarmEvent::jsonStatus() const
+{
+    QJsonArray ret = ActionEvent::jsonStatus().array();
+    QVariantMap map;
+
+    map.insert(sKeyName, "Alarm");
+    map.insert(sKeyValue, time);
+    map.insert(sKeyDesc, "The time the alarm is set for");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Time Till");
+    map.insert(sKeyValue, QString::number(timer->remainingTime() / 1000));
+    map.insert(sKeyDesc, "Seconds until the alarm");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    map.clear();
+    map.insert(sKeyName, "Conditional");
+    map.insert(sKeyValue, dayNightCondition ? "Daytime" : "Nighttime");
+    map.insert(sKeyDesc, "Whether to activate during the day or night");
+    ret.append(QJsonObject::fromVariantMap(map));
+
+    return QJsonDocument(ret);
+}
+

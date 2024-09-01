@@ -13,9 +13,11 @@ class AlarmEvent : public ActionEvent
     Q_OBJECT
 public:
     AlarmEvent(QString name, QString t);
-    QString getStatus() const;
-
     void setDayNight(bool isDay);
+
+    // Statusable interface
+    QJsonDocument jsonStatus() const override;
+    QString getStatus() const override;
 
 signals:
     bool isDaylight();
@@ -28,6 +30,8 @@ private:
     QString timeFormat = "hh:mm";
     bool conditionalDayNight;
     bool dayNightCondition;
+
+
 };
 
 #endif // ALARMEVENT_H
