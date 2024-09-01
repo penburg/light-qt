@@ -40,17 +40,10 @@ signals:
     bool configEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
     bool configEvapCoolerFanFilter(int filterTime, int timeRemain);
     bool configEvapCoolerSetMode(QString mode);
-    string lsBasicOnOff();
     string lsGpioConfig();
-    string lsThermalSensor();
     string lsThermalSensorConfig();
-    string lsSunRiseSet();
-    string lsThermalAlerts();
-    string lsEvents();
-    string lsEventActions();
-    string lsGpioInput();
-    string lsEvapCooler();
     string lsEvapCoolerModes();
+    QJsonDocument jsonStatus(QString type);
     QJsonDocument lsDeviceOptions();
     bool setDeviceOption(QString device, QString option, QVariant value);
     bool toggleRelay(QString name);

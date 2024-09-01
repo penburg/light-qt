@@ -431,13 +431,13 @@ string Console::ls(QStringList commands)
 {
     if(commands.size() > 0){
         if(commands.at(0).compare("BasicOnOff", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsBasicOnOff();
+            return jsonToString(emit jsonStatus("BasicOnOff"));
         }
-        else if(commands.at(0).compare("thermalSensor", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsThermalSensor();
+        else if(commands.at(0).compare("ThermalSensor", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return jsonToString(emit jsonStatus("ThermalSensor"));
         }
-        else if(commands.at(0).compare("thermalAlert", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsThermalAlerts();
+        else if(commands.at(0).compare("ThermalAlert", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return jsonToString(emit jsonStatus("ThermalAlerts"));;
         }
         else if(commands.at(0).compare("globalConfig", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return lsGlobal();
@@ -446,22 +446,22 @@ string Console::ls(QStringList commands)
             return lsConfig();
         }
         else if(commands.at(0).compare("sunRiseSet", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsSunRiseSet();
+            return jsonToString(emit jsonStatus("SunRiseSet"));
         }
         else if(commands.at(0).compare("events", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsEvents();
+            return jsonToString(emit jsonStatus("Events"));
         }
         else if(commands.at(0).compare("eventActions", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsEventActions();
+            return jsonToString(emit jsonStatus("EventAction"));
         }
         else if(commands.at(0).compare("gpioInputs", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsGpioInput();
-        }
-        else if(commands.at(0).compare("evapCooler", Qt::CaseSensitivity::CaseInsensitive) == 0){
-            return emit lsEvapCooler();
+            return jsonToString(emit jsonStatus("GpioInput"));
         }
         else if(commands.at(0).compare("evapCoolerModes", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return emit lsEvapCoolerModes();
+        }
+        else if(commands.at(0).compare("evapCooler", Qt::CaseSensitivity::CaseInsensitive) == 0){
+            return jsonToString(emit jsonStatus("EvapCooler"));
         }
         else if(commands.at(0).compare("deviceOptions", Qt::CaseSensitivity::CaseInsensitive) == 0){
             return jsonToString(emit lsDeviceOptions());

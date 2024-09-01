@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Enburg Dev");
     QCoreApplication::setOrganizationDomain("enburg.dev");
     QCoreApplication::setApplicationName("Lights-QT");
-    QCoreApplication::setApplicationVersion("0.0.1");
+    QCoreApplication::setApplicationVersion("0.1.1");
 
     Console console;
     console.run();
@@ -67,23 +67,16 @@ int main(int argc, char *argv[])
     QObject::connect(&console, &Console::configEvapCoolerFanFilter, backend.get(), &Lights::configEvapCoolerFanFilter);
     QObject::connect(&console, &Console::configEvapCoolerPurgePump, backend.get(), &Lights::configEvapCoolerPurgePump);
 
-    QObject::connect(&console, &Console::lsBasicOnOff, backend.get(), &Lights::lsBasicOnOff);
-    QObject::connect(&console, &Console::lsThermalSensor, backend.get(), &Lights::lsThermalSensor);
-    QObject::connect(&console, &Console::lsThermalAlerts, backend.get(), &Lights::lsThermalAlerts);
+
     QObject::connect(&console, &Console::lsGpioConfig, backend.get(), &Lights::lsGpioConfig);
     QObject::connect(&console, &Console::lsThermalSensorConfig, backend.get(), &Lights::lsThermalSensorConfig);
-    QObject::connect(&console, &Console::lsSunRiseSet, backend.get(), &Lights::lsSunRiseSet);
-    QObject::connect(&console, &Console::lsEvents, backend.get(), &Lights::lsEvents);
-    QObject::connect(&console, &Console::lsEventActions, backend.get(), &Lights::lsEventActions);
-    QObject::connect(&console, &Console::lsGpioInput, backend.get(), &Lights::lsGpioInput);
-    QObject::connect(&console, &Console::lsEvapCooler, backend.get(), &Lights::lsEvapCooler);
     QObject::connect(&console, &Console::lsEvapCoolerModes, backend.get(), &Lights::lsEvapCoolerModes);
 
     QObject::connect(&console, &Console::toggleRelay, backend.get(), &Lights::toggle);
 
     QObject::connect(&console, &Console::lsDeviceOptions, backend.get(), &Lights::lsDeviceOptions);
     QObject::connect(&console, &Console::setDeviceOption, backend.get(), &Lights::setDeviceOption);
-
+    QObject::connect(&console, &Console::jsonStatus, backend.get(), &Lights::jsonStatus);
 
 
     return a.exec();

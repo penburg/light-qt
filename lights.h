@@ -54,18 +54,13 @@ public slots:
     bool configEvapCoolerFanCondition(QString condition, QString fanName, double temp);
     bool configEvapCoolerPurgePump(QString pump, int purgeTime, int purgeInterval);
     bool configEvapCoolerFanFilter(int filterTime, int timeRemain);
-    std::string lsBasicOnOff();
+
     std::string lsGpioConfig();
-    std::string lsThermalSensor();
     std::string lsThermalSensorConfig();
-    std::string lsSunRiseSet();
-    std::string lsThermalAlerts();
-    std::string lsEvents();
-    std::string lsEventActions();
-    std::string lsGpioInput();
-    std::string lsEvapCooler();
     std::string lsEvapCoolerModes();
+
     QJsonDocument lsDeviceOptions();
+    QJsonDocument jsonStatus(QString type);
     bool setDeviceOption(QString device, QString option, QVariant value);
     bool addAlarm(QString name, QString time, QString isDayNight);
     bool addOnOffGroup(QString name, QStringList devices);
@@ -91,6 +86,8 @@ private:
 
     template<class T>
     string lsStatusable(shared_ptr<QHash<QString, shared_ptr<T>> > hash);
+    template<class T>
+    QJsonDocument jsonStatusable(shared_ptr<QHash<QString, shared_ptr<T>> > hash);
 
     void setupGpios();
     bool activateGpio(QString name, int line, int initial, int active);

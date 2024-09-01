@@ -869,11 +869,6 @@ QJsonDocument Lights::lsOptions()
     return QJsonDocument(ret);
 }
 
-string Lights::lsBasicOnOff()
-{
-    return lsStatusable(basicIOs);
-}
-
 string Lights::lsGpioConfig()
 {
     string ret = "";
@@ -894,11 +889,6 @@ string Lights::lsGpioConfig()
     settings.endArray();
 
     return ret;
-}
-
-string Lights::lsThermalSensor()
-{
-    return lsStatusable(thermalSensors);
 }
 
 string Lights::lsThermalSensorConfig()
@@ -922,41 +912,6 @@ string Lights::lsThermalSensorConfig()
     settings.endArray();
 
     return ret;
-}
-
-string Lights::lsSunRiseSet()
-{
-    return sunRiseSet->getStatus().toStdString();
-}
-
-string Lights::lsThermalAlerts()
-{
-    return lsStatusable(thermalAlerts);
-}
-
-string Lights::lsEvents()
-{
-    return lsStatusable(events);
-}
-
-string Lights::lsEventActions()
-{
-    return lsStatusable(eventActions);
-}
-
-string Lights::lsGpioInput()
-{
-    return lsStatusable(gpioInputs);
-}
-
-string Lights::lsEvapCooler()
-{
-    if(evapCooler != nullptr){
-        return evapCooler->getStatus().toStdString();
-    }
-    else{
-        return "disabled\n";
-    }
 }
 
 string Lights::lsEvapCoolerModes()
@@ -984,6 +939,43 @@ QJsonDocument Lights::lsDeviceOptions()
         ret.insert(key, basicIOs->value(key)->lsOptions().array());
     }
     return QJsonDocument::fromVariant(ret);
+}
+
+QJsonDocument Lights::jsonStatus(QString type)
+{
+    QJsonDocument ret;
+
+    if(type.compare("BasicOnOff", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(basicIOs);
+    }
+    else if(type.compare("ThermalSensor", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(thermalSensors);
+    }
+    else if(type.compare("SunRiseSet", Qt::CaseInsensitive) == 0){
+        ret = sunRiseSet->jsonStatus();
+    }
+    else if(type.compare("ThermalAlerts", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(thermalAlerts);
+    }
+    else if(type.compare("Events", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(events);
+    }
+    else if(type.compare("EventAction", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(eventActions);
+    }
+    else if(type.compare("GpioInput", Qt::CaseInsensitive) == 0){
+        ret = jsonStatusable(gpioInputs);
+    }
+    else if(type.compare("EvapCooler", Qt::CaseInsensitive) == 0){
+        if(evapCooler != nullptr){
+            return evapCooler->jsonStatus();
+        }
+        else{
+            return ret;
+        }
+    }
+
+    return ret;
 }
 
 bool Lights::setDeviceOption(QString device, QString option, QVariant value)
@@ -1201,4 +1193,21 @@ void Lights::setupGpios()
 
     }
     settings.endArray();
+}
+
+template<class T>
+QJsonDocument Lights::jsonStatusable(shared_ptr<QHash<QString, shared_ptr<T> > > hash)
+{
+    QVariantList ret;
+    if(hash->size() > 0){
+        QStringList keys = hash->keys();
+        foreach(QString key, keys){
+            auto value = hash->value(key);
+            shared_ptr<Statusable> status = dynamic_pointer_cast<T>(value);
+            ret.append(status->jsonStatus());
+        }
+
+    }
+
+    return QJsonDocument::fromVariant(ret);
 }
